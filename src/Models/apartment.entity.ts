@@ -16,7 +16,7 @@ export class ApartmentEntity {
   id: number;
 
   @Column({ name: 'name', length: 50, unique: true })
-    name!: string;
+  name: string;
 
   @Column({ name: 'number_of_rooms', type: 'integer' })
   numberOfRooms: number;

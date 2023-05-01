@@ -18,6 +18,7 @@ import { TenantController } from './controllers/tenant/tenant.controller';
 import { ApartmentController } from './controllers/apartment/apartment.controller';
 import { PaymentController } from './controllers/payment/payment.controller';
 import { TenantRepository } from './services/tenant/tenant.repository';
+import { ApartmentRepository } from './services/apartment/apartment.repository';
 
 @Module({
   imports: [
@@ -35,7 +36,10 @@ import { TenantRepository } from './services/tenant/tenant.repository';
       ],
       synchronize: true,
       logging: ['error', 'warn'],
-      cache: true,
+      cache: {
+        duration: 300000,
+        alwaysEnabled: true
+      },
       retryAttempts: 5,
     }),
   ],
@@ -53,6 +57,7 @@ import { TenantRepository } from './services/tenant/tenant.repository';
     ApartmentService,
     PaymentService,
     TenantRepository,
+    ApartmentRepository,
   ],
 })
-export class AppModule {}
+export class AppModule { }
