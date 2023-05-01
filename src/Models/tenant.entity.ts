@@ -24,7 +24,7 @@ export class TenantEntity {
   description: string;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: boolean;
+  isActive: Boolean;
 
   @Column({ name: 'phone', length: 15, nullable: true })
   phone: string;

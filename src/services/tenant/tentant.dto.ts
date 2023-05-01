@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 
 export class CreateTenantI {
   @ApiProperty()
@@ -19,3 +19,6 @@ export class CreateTenantI {
   @ApiProperty()
   docNumber: string;
 }
+
+
+
