@@ -24,6 +24,13 @@ export class ApartmentRepository {
         )).affected;
     }
 
+    async updateBusy(id: number, busy: boolean) {
+        return (await this.cnx.update(ApartmentEntity,
+            { id },
+            { busy: String(busy) === 'true' ? true : false }
+        )).affected;
+    }
+
     async getAll(busy?: boolean, status?: boolean) {
         if (busy == undefined || busy == null)
             busy = false;
@@ -39,5 +46,13 @@ export class ApartmentRepository {
             .andWhere('apartment.status = :status',
                 { status: String(status) == "true" ? true : false })
             .getRawMany();
+    }
+
+    async getById(id: number) {
+        return await this.cnx.createQueryBuilder()
+            .select()
+            .from(ApartmentEntity, 'apartment')
+            .where('apartment.id = :id', { id })
+            .getRawOne();
     }
 }

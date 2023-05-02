@@ -19,6 +19,15 @@ import { ApartmentController } from './controllers/apartment/apartment.controlle
 import { PaymentController } from './controllers/payment/payment.controller';
 import { TenantRepository } from './services/tenant/tenant.repository';
 import { ApartmentRepository } from './services/apartment/apartment.repository';
+import { LeaseService } from './services/lease/lease.service';
+import { MethodPaymentService } from './services/method-payment/method-payment.service';
+import { BankService } from './services/bank/bank.service';
+import { PaymentRepository } from './services/payment/payment.repository';
+import { BankRepository } from './services/bank/bank.repository';
+import { MethodPaymentRepository } from './services/method-payment/method-payment.repository';
+import { MethodPaymentController } from './controllers/method-payment/method-payment.controller';
+import { LeaseRepository } from './services/lease/lease.repository';
+import { LeaseController } from './controllers/lease/lease.controller';
 
 @Module({
   imports: [
@@ -50,6 +59,8 @@ import { ApartmentRepository } from './services/apartment/apartment.repository';
     PaymentController,
     BankController,
     MaintenanceController,
+    MethodPaymentController,
+    LeaseController,
   ],
   providers: [
     AppService,
@@ -58,6 +69,13 @@ import { ApartmentRepository } from './services/apartment/apartment.repository';
     PaymentService,
     TenantRepository,
     ApartmentRepository,
+    LeaseService,
+    MethodPaymentService,
+    BankService,
+    PaymentRepository,
+    BankRepository,
+    MethodPaymentRepository,
+    LeaseRepository
   ],
 })
 export class AppModule { }

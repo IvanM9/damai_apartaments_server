@@ -69,4 +69,32 @@ export class ApartmentService {
             throw new Error(error.message);
         }
     }
+
+    async getById(id: number) {
+        try {
+            const apartment = await this.repository.getById(id);
+
+            if(apartment == null) {
+                throw new Error(`Error al obtener el apartamento con id: ${id}`)
+            }
+
+            return apartment;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    async updateBusy(id: number, busy: boolean) {
+        try {
+            const update = await this.repository.updateBusy(id, busy);
+
+            if(update <= 0) {
+                throw new Error(`Error al actualizar el estado de ocupado del apartamento con id: ${id}`)
+            }
+
+            return update;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
