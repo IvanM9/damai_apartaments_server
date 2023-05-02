@@ -24,7 +24,20 @@ export class ApartmentRepository {
         )).affected;
     }
 
-    async getAll() {
-        return await this.cnx.find(ApartmentEntity);
+    async getAll(busy?: boolean, status?: boolean) {
+        if (busy == undefined || busy == null)
+            busy = false;
+
+        if (status == undefined || status == null)
+            status = true;
+
+        return await this.cnx.createQueryBuilder()
+            .select()
+            .from(ApartmentEntity, 'apartment')
+            .where('apartment.busy = :busy',
+                { busy: String(busy) == "true" ? true : false })
+            .andWhere('apartment.status = :status',
+                { status: String(status) == "true" ? true : false })
+            .getRawMany();
     }
 }

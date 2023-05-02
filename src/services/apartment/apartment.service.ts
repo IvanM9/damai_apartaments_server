@@ -56,9 +56,9 @@ export class ApartmentService {
         })
     }
 
-    async getAll() {
+    async getAll(busy?: boolean, status?: boolean) {
         try {
-            const apartments = await this.repository.getAll();
+            const apartments = await this.repository.getAll(busy, status);
 
             if(apartments == null) {
                 throw new Error('Error al obtener los apartamentos')

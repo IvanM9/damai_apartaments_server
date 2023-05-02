@@ -36,6 +36,9 @@ export class ApartmentEntity {
   @UpdateDateColumn({ name: 'update_at', nullable: true })
   updateAt: Date;
 
+  @Column({ name: 'busy', default: false, type: 'boolean' })
+  busy: boolean;
+
   @OneToMany(() => LeaseEntity, (lease) => lease.apartment)
   leases: LeaseEntity[];
 

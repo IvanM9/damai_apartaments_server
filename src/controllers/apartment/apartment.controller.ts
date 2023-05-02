@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpException, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateApartmentI } from 'src/services/apartment/aparment.dto';
 import { ApartmentService } from 'src/services/apartment/apartment.service';
 
@@ -18,9 +18,11 @@ export class ApartmentController {
     }
 
     @Get()
-    async getAll() {
+    @ApiQuery({ name: 'busy', required: false })
+    @ApiQuery({ name: 'status', required: false })
+    async getAll(@Query('busy') busy: boolean, @Query('status') status: boolean) {
         try {
-            return await this.service.getAll();
+            return await this.service.getAll(busy, status);
         } catch (error) {
             throw new HttpException(error.message, 400)
         }
