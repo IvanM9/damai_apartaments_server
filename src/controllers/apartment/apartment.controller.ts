@@ -10,40 +10,24 @@ export class ApartmentController {
 
     @Post()
     async create(@Body() payload: CreateApartmentI) {
-        try {
-            return await this.service.create(payload);
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }
+        return await this.service.create(payload);
     }
 
     @Get()
     @ApiQuery({ name: 'busy', required: false })
     @ApiQuery({ name: 'status', required: false })
     async getAll(@Query('busy') busy: boolean, @Query('status') status: boolean) {
-        try {
-            return await this.service.getAll(busy, status);
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }
+        return await this.service.getAll(busy, status);
     }
 
     @Put("update/:id")
     async update(@Param('id') id: number, @Body() payload: CreateApartmentI) {
-        try {
-            return await this.service.update(id, payload);
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }
+        return await this.service.update(id, payload);
     }
 
     @Put("update-status/:id")
     async updateStatus(@Param('id') id: number, @Query('status') status: boolean) {
-        try {
-            return await this.service.updateStatus(id, status);
-        } catch (error) {
-            throw new HttpException(error.message, 400)
-        }
+        return await this.service.updateStatus(id, status);
     }
 
 }

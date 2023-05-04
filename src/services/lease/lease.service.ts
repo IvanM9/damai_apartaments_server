@@ -59,4 +59,17 @@ export class LeaseService {
             throw new Error(error.message);
         }
     }
+
+    async getById(id: number) {
+        try {
+            const data = await this.repository.getById(id);
+            
+            if(!data)
+                throw new Error("Error en obtener contrato");
+            
+            return data;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }

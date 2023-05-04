@@ -10,46 +10,26 @@ export class TenantController {
 
   @Post()
   async create(@Body() payload: CreateTenantI) {
-    try {
-      return await this.service.create(payload);
-    } catch (error) {
-      throw new HttpException(error.message, 400);
-    }
+    return await this.service.create(payload);
   }
 
   @Get()
   async findAll() {
-    try {
-      return await this.service.findAll();
-    } catch (error) {
-      throw new HttpException(error.message, 400);
-    }
+    return await this.service.findAll();
   }
 
   @Put("/update/:id")
   async update(@Param('id') id: number, @Body() payload: CreateTenantI) {
-    try {
-      return await this.service.update(id, payload);
-    } catch (error) {
-      throw new HttpException(error.message, 400);
-    }
+    return await this.service.update(id, payload);
   }
 
   @Put("/update-status/:id")
   async updateStatus(@Param('id') id: number, @Query('status') status: boolean) {
-    try {
-      return await this.service.updateStatus(id, status);
-    } catch (error) {
-      throw new HttpException(error.message, 400);
-    }
+    return await this.service.updateStatus(id, status);
   }
 
   @Get("/:id")
   async getById(@Param('id') id: number) {
-    try {
-      return await this.service.getById(id);
-    } catch (error) {
-      throw new HttpException(error.message, 400);
-    }
+    return await this.service.getById(id);
   }
 }

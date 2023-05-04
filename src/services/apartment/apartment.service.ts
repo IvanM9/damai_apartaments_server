@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ApartmentRepository } from './apartment.repository';
 import { CreateApartmentI } from './aparment.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
@@ -14,12 +14,12 @@ export class ApartmentService {
                 const insert = await this.repository.create(payload);
 
                 if (insert == null) {
-                    throw new Error('Error al crear el apartamento')
+                    throw new HttpException('Error al crear el apartamento', HttpStatus.BAD_REQUEST)
                 }
 
                 return insert;
             } catch (error) {
-                throw new Error(error.message);
+                throw new error;
             }
         })
     };
@@ -30,12 +30,12 @@ export class ApartmentService {
                 const update = await this.repository.update(id, payload);
 
                 if (update <= 0) {
-                    throw new Error('Error al actualizar el apartamento')
+                    throw new HttpException('Error al actualizar el apartamento', HttpStatus.NOT_MODIFIED);
                 }
 
                 return update;
             } catch (error) {
-                throw new Error(error.message);
+                throw error;
             }
         })
     }
@@ -51,7 +51,7 @@ export class ApartmentService {
 
                 return update;
             } catch (error) {
-                throw new Error(error.message);
+                throw error;
             }
         })
     }
@@ -61,12 +61,12 @@ export class ApartmentService {
             const apartments = await this.repository.getAll(busy, status);
 
             if(apartments == null) {
-                throw new Error('Error al obtener los apartamentos')
+                throw new HttpException('Error al obtener los apartamentos', HttpStatus.NOT_FOUND)
             }
 
             return apartments;
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     }
 
@@ -75,12 +75,12 @@ export class ApartmentService {
             const apartment = await this.repository.getById(id);
 
             if(apartment == null) {
-                throw new Error(`Error al obtener el apartamento con id: ${id}`)
+                throw new HttpException(`Error al obtener el apartamento con id: ${id}`, HttpStatus.NOT_FOUND);
             }
 
             return apartment;
         } catch (error) {
-            throw new Error(error.message);
+            throw new error;
         }
     }
 
@@ -89,12 +89,12 @@ export class ApartmentService {
             const update = await this.repository.updateBusy(id, busy);
 
             if(update <= 0) {
-                throw new Error(`Error al actualizar el estado de ocupado del apartamento con id: ${id}`)
+                throw new HttpException(`Error al actualizar el estado de ocupado del apartamento con id: ${id}`, HttpStatus.NOT_MODIFIED);
             }
 
             return update;
         } catch (error) {
-            throw new Error(error.message);
+            throw new error;
         }
     }
 }

@@ -19,4 +19,8 @@ export class LeaseRepository{
         .orderBy("lease.id", "DESC")
         .getRawMany();
     }
+
+    async getById(id: number) {
+        return await this.cnx.findOne(LeaseEntity, { where: { id }})
+    }
 }
