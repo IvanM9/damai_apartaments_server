@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiQuery, ApiTags, } from '@nestjs/swagger';
-import { CreatePaymentDto } from 'src/services/payment/payment.dto';
+import { CreatePaymentDto, UpdatePaymentDto } from 'src/services/payment/payment.dto';
 import { PaymentService } from 'src/services/payment/payment.service';
 import { environment } from 'src/shared/constants/environment';
 import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
@@ -61,5 +61,17 @@ export class PaymentController {
         } as PaginationDto;
 
         return await this.service.getPaymentsByTenant(id, pagination, startDate, endDate);
+    }
+
+    @Patch('/:id')
+    async update(@Param('id') id: number, @Body() payload: UpdatePaymentDto) {
+        return await this.service.update(id, payload);
+    }
+
+    @Get('/by-date')
+    @ApiQuery({ name: 'year', required: false })
+    @ApiQuery({ name: 'month', required: false })
+    async getByDate(@Query('year') year: string, @Query('month') month: number) {
+        return this.service.getByYearOrMonth(year, month);
     }
 }

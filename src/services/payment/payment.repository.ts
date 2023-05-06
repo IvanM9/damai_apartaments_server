@@ -107,6 +107,22 @@ export class PaymentRepository {
         } as TableI;;
     }
 
-    async updatePayment() { }
+    async updatePayment(id: number, payload: PaymentEntity) {
+        return (await this.cnx.update(PaymentEntity, { id }, payload)).affected;
+    }
+
+    async getByYearOrMonth(year?: string, month?: number) {
+
+        const query = this.cnx.createQueryBuilder()
+            .select()
+            .from(PaymentEntity, 'payment')
+            .where('strftime("%Y", payment.date) = :year', { year: year ?? new Date().getFullYear().toString() })
+
+        if (month)
+            query.andWhere('strftime("%m", payment.date) = :month', { month })
+
+        return await query.getRawMany<PaymentEntity>();
+    }
+
     async deletePayment() { }
 }

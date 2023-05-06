@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PaymentRepository } from './payment.repository';
-import { CreatePaymentDto } from './payment.dto';
+import { CreatePaymentDto, UpdatePaymentDto } from './payment.dto';
 import { PaymentEntity } from 'src/Models/payment.entity';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
@@ -9,6 +9,7 @@ import { LeaseService } from '../lease/lease.service';
 import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
 import { ApartmentService } from '../apartment/apartment.service';
 import { TenantService } from '../tenant/tenant.service';
+import { updateFailed, updateSuccessful } from 'src/shared/constants/messages';
 
 @Injectable()
 export class PaymentService {
@@ -85,6 +86,47 @@ export class PaymentService {
                 throw new HttpException("Error en obtener pagos", HttpStatus.INTERNAL_SERVER_ERROR);
 
             return payments;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async update(id: number, payload: UpdatePaymentDto) {
+        try {
+            const methodPayment = await this.serviceMethodPayment.getById(payload.methodPaymentId);
+
+            const data = {
+                amount: payload.amount,
+                date: payload.date,
+                methodPayment
+            } as PaymentEntity;
+
+            const updated = await this.repo.updatePayment(id, data);
+
+            if (updated === 0)
+                throw new HttpException(updateFailed(`El pago con id ${id}`), HttpStatus.BAD_REQUEST);
+
+            return updateSuccessful(`El pago con id ${id}`)
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getByYearOrMonth(year?: string, month?: number) {
+        try {
+            const data = await this.repo.getByYearOrMonth(year, month);
+
+            if (!data)
+                throw new HttpException('Error en obtener los pagos', HttpStatus.BAD_REQUEST);
+
+            let total: number = 0;
+
+            data.forEach((payment) => { total += (payment.amount as unknown as number) });
+
+            return {
+                payments: data,
+                total
+            };
         } catch (error) {
             throw error;
         }
