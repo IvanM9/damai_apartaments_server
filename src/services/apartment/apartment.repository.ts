@@ -49,10 +49,9 @@ export class ApartmentRepository {
     }
 
     async getById(id: number) {
-        return await this.cnx.createQueryBuilder()
-            .select()
-            .from(ApartmentEntity, 'apartment')
-            .where('apartment.id = :id', { id })
-            .getRawOne();
+        return await this.cnx.findOne(ApartmentEntity, {
+            where: { id },
+            relations: { leases: true }
+        })
     }
 }

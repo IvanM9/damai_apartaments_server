@@ -19,7 +19,7 @@ export class ApartmentService {
 
                 return insert;
             } catch (error) {
-                throw new error;
+                throw error;
             }
         })
     };
@@ -46,7 +46,10 @@ export class ApartmentService {
                 const update = await this.repository.updateStatus(id, status);
 
                 if (update <= 0) {
-                    throw new Error(`Error al actualizar el estado del apartamento con id: ${id}`)
+                    throw new HttpException(
+                        `Error al actualizar el estado del apartamento con id: ${id}`,
+                        HttpStatus.NOT_MODIFIED
+                    );
                 }
 
                 return update;
@@ -60,8 +63,11 @@ export class ApartmentService {
         try {
             const apartments = await this.repository.getAll(busy, status);
 
-            if(apartments == null) {
-                throw new HttpException('Error al obtener los apartamentos', HttpStatus.NOT_FOUND)
+            if (apartments == null) {
+                throw new HttpException(
+                    'Error al obtener los apartamentos',
+                    HttpStatus.NOT_FOUND
+                )
             }
 
             return apartments;
@@ -74,13 +80,16 @@ export class ApartmentService {
         try {
             const apartment = await this.repository.getById(id);
 
-            if(apartment == null) {
-                throw new HttpException(`Error al obtener el apartamento con id: ${id}`, HttpStatus.NOT_FOUND);
+            if (apartment == null) {
+                throw new HttpException(
+                    `Error al obtener el apartamento con id: ${id}`,
+                    HttpStatus.NOT_FOUND
+                );
             }
 
             return apartment;
         } catch (error) {
-            throw new error;
+            throw error;
         }
     }
 
@@ -88,13 +97,16 @@ export class ApartmentService {
         try {
             const update = await this.repository.updateBusy(id, busy);
 
-            if(update <= 0) {
-                throw new HttpException(`Error al actualizar el estado de ocupado del apartamento con id: ${id}`, HttpStatus.NOT_MODIFIED);
+            if (update <= 0) {
+                throw new HttpException(
+                    `Error al actualizar el estado de ocupado del apartamento con id: ${id}`,
+                    HttpStatus.NOT_MODIFIED
+                );
             }
 
             return update;
         } catch (error) {
-            throw new error;
+            throw error;
         }
     }
 }

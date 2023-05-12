@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateMethodPaymentDto } from 'src/services/method-payment/method-payment.dto';
 import { MethodPaymentService } from 'src/services/method-payment/method-payment.service';
 
@@ -9,6 +9,7 @@ export class MethodPaymentController {
     constructor(private service: MethodPaymentService) { }
 
     @Post()
+    @ApiOperation({ summary: 'Registrar un metodo de pago' })
     async createMethodPayment(@Body() payload: CreateMethodPaymentDto) {
         try {
             return await this.service.createMethodPayment(payload);
@@ -18,6 +19,7 @@ export class MethodPaymentController {
     }
 
     @Get(':id')
+    @ApiOperation({ summary: 'Obtener un metodo de pago' })
     async getById(@Param('id') id: number) {
         try {
             return await this.service.getById(id);

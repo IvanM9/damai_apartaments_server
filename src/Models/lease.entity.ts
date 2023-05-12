@@ -3,30 +3,30 @@ import { ApartmentEntity } from "./apartment.entity";
 import { TenantEntity } from "./tenant.entity";
 import { PaymentEntity } from "./payment.entity";
 
-@Entity({name:"lease"})
-export class LeaseEntity{
+@Entity({ name: "lease" })
+export class LeaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({name:"start_date", type:"date"})
+    @Column({ name: "start_date", type: "date" })
     startDate: Date;
 
-    @Column({name:"end_date", type:"date"})
+    @Column({ name: "end_date", type: "date", nullable: true })
     endDate: Date;
 
-    @Column({name:"monthly_rent", type:"decimal"})
+    @Column({ name: "monthly_rent", type: "decimal" })
     monthlyRent: string;
 
-    @Column({name:"status", type:"boolean", default:true})
+    @Column({ name: "status", type: "boolean", default: true })
     status: boolean;
 
-    @Column({name:"description", nullable:true, type:"text"})
+    @Column({ name: "description", nullable: true, type: "text" })
     description: string;
 
-    @CreateDateColumn({name:"created_at", update:false})
+    @CreateDateColumn({ name: "created_at", update: false })
     createdAt: Date;
 
-    @UpdateDateColumn({name:"updated_at", nullable:true})
+    @UpdateDateColumn({ name: "updated_at", nullable: true })
     updatedAt: Date;
 
     @ManyToOne(type => ApartmentEntity, apartment => apartment.leases)

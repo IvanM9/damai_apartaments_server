@@ -1,5 +1,5 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateBankDto } from 'src/services/bank/bank.dto';
 import { BankService } from 'src/services/bank/bank.service';
 
@@ -9,6 +9,7 @@ export class BankController {
     constructor(private service: BankService) { }
 
     @Post()
+    @ApiOperation({ summary: 'Registrar un banco' })
     async create(@Body() payload: CreateBankDto){
         try {
             return await this.service.createBank(payload);

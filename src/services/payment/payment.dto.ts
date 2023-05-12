@@ -7,7 +7,7 @@ export class CreatePaymentDto {
     amount: string;
 
     @ApiProperty()
-    @IsDateString()
+    @IsDateString({ strict: true })
     date: Date;
 
     @ApiProperty()
@@ -19,4 +19,4 @@ export class CreatePaymentDto {
     methodPaymentId: number;
 }
 
-export class UpdatePaymentDto extends OmitType(CreatePaymentDto, ['leaseId']) {}
+export class UpdatePaymentDto extends OmitType(CreatePaymentDto, ['leaseId']) { }

@@ -29,6 +29,9 @@ export class PaymentService {
 
                 const lease = await this.serviceLease.getById(payload.leaseId);
 
+                if( lease.status == false)
+                    throw new HttpException("El contrato esta inactivo", HttpStatus.BAD_REQUEST);
+                    
                 const data = {
                     amount: payload.amount,
                     date: payload.date,
