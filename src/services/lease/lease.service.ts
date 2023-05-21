@@ -106,7 +106,7 @@ export class LeaseService {
                 description: payload.description,
                 monthlyRent: payload.monthlyRent,
             } as LeaseEntity;
-
+            
             const updated = await this.repository.update(data, id);
 
             if (updated.affected == 0)

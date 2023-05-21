@@ -23,7 +23,7 @@ export class LeaseRepository {
     async getById(id: number) {
         return await this.cnx.findOne(LeaseEntity, {
             where: { id },
-            relations: { apartment: true, tenant: true, payments: true }
+            relations: { apartment: true, tenant: true }
         })
     }
 

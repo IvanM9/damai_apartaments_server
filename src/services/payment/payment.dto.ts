@@ -4,7 +4,7 @@ import { IsDateString, IsDecimal, IsEmpty, IsNotEmpty, IsNumber, IsString } from
 export class CreatePaymentDto {
     @ApiProperty({ type: 'decimal', format: 'decimal', example: '"100.00"' })
     @IsDecimal()
-    amount: string;
+    amount: number;
 
     @ApiProperty()
     @IsDateString({ strict: true })

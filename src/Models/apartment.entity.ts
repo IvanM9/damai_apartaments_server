@@ -30,11 +30,11 @@ export class ApartmentEntity {
   @Column({ name: 'description', nullable: true })
   description: string;
 
-  @CreateDateColumn({ name: 'date_at', update: false })
-  dateAt: Date;
+  @CreateDateColumn({ name: 'created_at', update: false })
+  createdAt: Date;
 
-  @UpdateDateColumn({ name: 'update_at', nullable: true })
-  updateAt: Date;
+  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  updatedAt: Date;
 
   @Column({ name: 'busy', default: false, type: 'boolean' })
   busy: boolean;

@@ -28,6 +28,8 @@ import { MethodPaymentRepository } from './services/method-payment/method-paymen
 import { MethodPaymentController } from './controllers/method-payment/method-payment.controller';
 import { LeaseRepository } from './services/lease/lease.repository';
 import { LeaseController } from './controllers/lease/lease.controller';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DateFormatInterceptor } from './shared/interceptors/date-format.interceptor';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { LeaseController } from './controllers/lease/lease.controller';
       logging: ['error', 'warn'],
       cache: {
         duration: 300000,
-        alwaysEnabled: true
+        alwaysEnabled: true,
       },
       retryAttempts: 5,
     }),
@@ -75,7 +77,11 @@ import { LeaseController } from './controllers/lease/lease.controller';
     PaymentRepository,
     BankRepository,
     MethodPaymentRepository,
-    LeaseRepository
+    LeaseRepository,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DateFormatInterceptor,
+    },
   ],
 })
-export class AppModule { }
+export class AppModule {}

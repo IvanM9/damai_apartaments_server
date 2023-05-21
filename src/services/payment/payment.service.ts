@@ -13,125 +13,213 @@ import { updateFailed, updateSuccessful } from 'src/shared/constants/messages';
 
 @Injectable()
 export class PaymentService {
-    constructor(
-        private repo: PaymentRepository,
-        @InjectEntityManager() private cnx: EntityManager,
-        private serviceMethodPayment: MethodPaymentService,
-        private serviceLease: LeaseService,
-        private serviceApartment: ApartmentService,
-        private serviceTenant: TenantService
-    ) { }
+  constructor(
+    private repo: PaymentRepository,
+    @InjectEntityManager() private cnx: EntityManager,
+    private serviceMethodPayment: MethodPaymentService,
+    private serviceLease: LeaseService,
+    private serviceApartment: ApartmentService,
+    private serviceTenant: TenantService,
+  ) {}
 
-    async createPayment(payload: CreatePaymentDto) {
-        return await this.cnx.transaction(async () => {
-            try {
-                const methodPayment = await this.serviceMethodPayment.getById(payload.methodPaymentId);
+  async createPayment(payload: CreatePaymentDto) {
+    return await this.cnx.transaction(async () => {
+      try {
+        const methodPayment = await this.serviceMethodPayment.getById(
+          payload.methodPaymentId,
+        );
 
-                const lease = await this.serviceLease.getById(payload.leaseId);
+        const lease = await this.serviceLease.getById(payload.leaseId);
 
-                if( lease.status == false)
-                    throw new HttpException("El contrato esta inactivo", HttpStatus.BAD_REQUEST);
-                    
-                const data = {
-                    amount: payload.amount,
-                    date: payload.date,
-                    lease,
-                    methodPayment,
-                } as PaymentEntity;
+        if (lease.status == false)
+          throw new HttpException(
+            'El contrato esta inactivo',
+            HttpStatus.BAD_REQUEST,
+          );
 
-                const insert = await this.repo.createPayment(data);
+        const data = {
+          amount: payload.amount,
+          date: payload.date,
+          lease,
+          methodPayment,
+        } as PaymentEntity;
 
-                if (!insert)
-                    throw new HttpException("Error en crear pago", HttpStatus.BAD_REQUEST);
+        const insert = await this.repo.createPayment(data);
 
-                return insert.id;
-            } catch (error) {
-                throw error;
-            }
-        });
+        if (!insert)
+          throw new HttpException(
+            'Error en crear pago',
+            HttpStatus.BAD_REQUEST,
+          );
+
+        return insert.id;
+      } catch (error) {
+        throw error;
+      }
+    });
+  }
+
+  async getAll() {
+    try {
+      const payments = await this.repo.getAll();
+
+      if (!payments)
+        throw new HttpException('Error en obtener pagos', HttpStatus.NOT_FOUND);
+
+      return payments;
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async getAll() {
-        try {
-            const payments = await this.repo.getAll();
+  async getPaymentByApartment(
+    id: number,
+    pagination?: PaginationDto,
+    startDate?: Date,
+    endDate?: Date,
+  ) {
+    try {
+      await this.serviceApartment.getById(id);
 
-            if (!payments)
-                throw new HttpException("Error en obtener pagos", HttpStatus.NOT_FOUND);
+      const payments = await this.repo.getPaymentByApartment(
+        id,
+        pagination,
+        startDate,
+        endDate,
+      );
 
-            return payments;
-        } catch (error) {
-            throw error;
-        }
+      if (!payments)
+        throw new HttpException(
+          'Error en obtener pagos',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+
+      return payments;
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async getPaymentByApartment(id: number, pagination?: PaginationDto, startDate?: Date, endDate?: Date) {
-        try {
-            await this.serviceApartment.getById(id);
+  async getPaymentsByTenant(
+    id: number,
+    pagination?: PaginationDto,
+    startDate?: Date,
+    endDate?: Date,
+  ) {
+    try {
+      await this.serviceTenant.getById(id);
 
-            const payments = await this.repo.getPaymentByApartment(id, pagination, startDate, endDate);
+      const payments = await this.repo.getPaymentByTenant(
+        id,
+        pagination,
+        startDate,
+        endDate,
+      );
 
-            if (!payments)
-                throw new HttpException("Error en obtener pagos", HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!payments)
+        throw new HttpException(
+          'Error en obtener pagos',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
 
-            return payments;
-        } catch (error) {
-            throw error;
-        }
+      return payments;
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async getPaymentsByTenant(id: number, pagination?: PaginationDto, startDate?: Date, endDate?: Date) {
-        try {
-            await this.serviceTenant.getById(id);
+  async update(id: number, payload: UpdatePaymentDto) {
+    try {
+      const methodPayment = await this.serviceMethodPayment.getById(
+        payload.methodPaymentId,
+      );
 
-            const payments = await this.repo.getPaymentByTenant(id, pagination, startDate, endDate);
+      const data = {
+        amount: payload.amount,
+        date: payload.date,
+        methodPayment,
+      } as PaymentEntity;
 
-            if (!payments)
-                throw new HttpException("Error en obtener pagos", HttpStatus.INTERNAL_SERVER_ERROR);
+      const updated = await this.repo.updatePayment(id, data);
 
-            return payments;
-        } catch (error) {
-            throw error;
-        }
+      if (updated === 0)
+        throw new HttpException(
+          updateFailed(`El pago con id ${id}`),
+          HttpStatus.BAD_REQUEST,
+        );
+
+      return updateSuccessful(`El pago con id ${id}`);
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async update(id: number, payload: UpdatePaymentDto) {
-        try {
-            const methodPayment = await this.serviceMethodPayment.getById(payload.methodPaymentId);
+  async getByYearOrMonth(year?: string, month?: number) {
+    try {
+      const data = await this.repo.getByYearOrMonth(year, month);
 
-            const data = {
-                amount: payload.amount,
-                date: payload.date,
-                methodPayment
-            } as PaymentEntity;
+      if (!data)
+        throw new HttpException(
+          'Error en obtener los pagos',
+          HttpStatus.BAD_REQUEST,
+        );
 
-            const updated = await this.repo.updatePayment(id, data);
+      let total = 0;
 
-            if (updated === 0)
-                throw new HttpException(updateFailed(`El pago con id ${id}`), HttpStatus.BAD_REQUEST);
+      data.forEach((payment) => {
+        total += payment.amount as unknown as number;
+      });
 
-            return updateSuccessful(`El pago con id ${id}`)
-        } catch (error) {
-            throw error;
-        }
+      return {
+        payments: data,
+        total,
+      };
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async getByYearOrMonth(year?: string, month?: number) {
-        try {
-            const data = await this.repo.getByYearOrMonth(year, month);
+  async getPaymentsByLease(
+    id: number,
+    pagination?: PaginationDto,
+    startDate?: Date,
+    endDate?: Date,
+  ) {
+    try {
+      await this.serviceLease.getById(id);
 
-            if (!data)
-                throw new HttpException('Error en obtener los pagos', HttpStatus.BAD_REQUEST);
+      const payments = await this.repo.getPaymentByLease(
+        id,
+        pagination,
+        startDate,
+        endDate,
+      );
 
-            let total: number = 0;
+      if (!payments)
+        throw new HttpException(
+          'Error en obtener pagos',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
 
-            data.forEach((payment) => { total += (payment.amount as unknown as number) });
-
-            return {
-                payments: data,
-                total
-            };
-        } catch (error) {
-            throw error;
-        }
+      return payments;
+    } catch (error) {
+      throw error;
     }
+  }
+
+  async getValuesGeneral() {
+    try {
+      const data = await this.repo.getValuesGeneral();
+
+      if (!data)
+        throw new HttpException(
+          'Error en obtener los pagos',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

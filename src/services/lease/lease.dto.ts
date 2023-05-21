@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { ApiProperty, OmitType, PickType } from "@nestjs/swagger";
 import { IsDateString, IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateLeaseDto {
@@ -29,7 +29,14 @@ export class CreateLeaseDto {
     tenantId: number;
 }
 
-export class UpdateLeaseDto extends OmitType(CreateLeaseDto, ['apartmentId', 'tenantId']) { 
+export class UpdateLeaseDto extends PickType(CreateLeaseDto, ['description', 'endDate']) {
+    @ApiProperty()
     @IsOptional()
+    @IsDateString({ strict: true })
     startDate: Date;
+
+    @ApiProperty()
+    @IsDecimal({ decimal_digits: '1,2' })
+    @IsOptional()
+    monthlyRent: string;
 }

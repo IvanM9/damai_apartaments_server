@@ -8,7 +8,7 @@ export class PaymentEntity{
     id: number;
 
     @Column({name:"amount", type:"decimal"})
-    amount: string;
+    amount: number;
 
     @Column({name:"date", type:"date"})
     date: Date;
