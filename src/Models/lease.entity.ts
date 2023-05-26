@@ -1,40 +1,49 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ApartmentEntity } from "./apartment.entity";
-import { TenantEntity } from "./tenant.entity";
-import { PaymentEntity } from "./payment.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { ApartmentEntity } from './apartment.entity';
+import { TenantEntity } from './tenant.entity';
+import { PaymentEntity } from './payment.entity';
 
-@Entity({ name: "lease" })
+@Entity({ name: 'lease' })
 export class LeaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ name: "start_date", type: "date" })
-    startDate: Date;
+  @Column({ name: 'start_date', type: 'date' })
+  startDate: Date;
 
-    @Column({ name: "end_date", type: "date", nullable: true })
-    endDate: Date;
+  @Column({ name: 'end_date', type: 'date', nullable: true })
+  endDate: Date;
 
-    @Column({ name: "monthly_rent", type: "decimal" })
-    monthlyRent: string;
+  @Column({ name: 'monthly_rent', type: 'decimal' })
+  monthlyRent: string;
 
-    @Column({ name: "status", type: "boolean", default: true })
-    status: boolean;
+  @Column({ name: 'status', type: 'boolean', default: true })
+  status: boolean;
 
-    @Column({ name: "description", nullable: true, type: "text" })
-    description: string;
+  @Column({ name: 'description', nullable: true, type: 'text' })
+  description: string;
 
-    @CreateDateColumn({ name: "created_at", update: false })
-    createdAt: Date;
+  @CreateDateColumn({ name: 'created_at', update: false })
+  createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at", nullable: true })
-    updatedAt: Date;
+  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  updatedAt: Date;
 
-    @ManyToOne(type => ApartmentEntity, apartment => apartment.leases)
-    apartment: ApartmentEntity;
+  @ManyToOne((type) => ApartmentEntity, (apartment) => apartment.leases)
+  apartment: ApartmentEntity;
 
-    @ManyToOne(type => TenantEntity, tenant => tenant.leases)
-    tenant: TenantEntity;
+  @ManyToOne((type) => TenantEntity, (tenant) => tenant.leases)
+  tenant: TenantEntity;
 
-    @OneToMany(type => PaymentEntity, payment => payment.lease)
-    payments: PaymentEntity[];
+  @OneToMany((type) => PaymentEntity, (payment) => payment.lease)
+  payments: PaymentEntity[];
 }
