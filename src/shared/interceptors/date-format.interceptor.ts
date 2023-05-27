@@ -13,6 +13,8 @@ export class DateFormatInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((element) => {
+        if (!element) return;
+
         if (Array.isArray(element.data)) {
           element.data = element.data.map((item) => this.formatDates(item));
         } else if (Array.isArray(element)) {

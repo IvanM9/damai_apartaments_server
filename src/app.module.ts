@@ -30,6 +30,8 @@ import { LeaseRepository } from './services/lease/lease.repository';
 import { LeaseController } from './controllers/lease/lease.controller';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DateFormatInterceptor } from './shared/interceptors/date-format.interceptor';
+import { BackupController } from './controllers/backup/backup.controller';
+import { BackupService } from './services/backup/backup.service';
 
 @Module({
   imports: [
@@ -63,6 +65,7 @@ import { DateFormatInterceptor } from './shared/interceptors/date-format.interce
     MaintenanceController,
     MethodPaymentController,
     LeaseController,
+    BackupController,
   ],
   providers: [
     AppService,
@@ -82,6 +85,7 @@ import { DateFormatInterceptor } from './shared/interceptors/date-format.interce
       provide: APP_INTERCEPTOR,
       useClass: DateFormatInterceptor,
     },
+    BackupService,
   ],
 })
 export class AppModule {}
