@@ -32,6 +32,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DateFormatInterceptor } from './shared/interceptors/date-format.interceptor';
 import { BackupController } from './controllers/backup/backup.controller';
 import { BackupService } from './services/backup/backup.service';
+import { MaintenanceService } from './services/maintenance/maintenance.service';
+import { MaintenanceRepository } from './services/maintenance/maintenance.repository';
 
 @Module({
   imports: [
@@ -86,6 +88,8 @@ import { BackupService } from './services/backup/backup.service';
       useClass: DateFormatInterceptor,
     },
     BackupService,
+    MaintenanceService,
+    MaintenanceRepository,
   ],
 })
 export class AppModule {}
