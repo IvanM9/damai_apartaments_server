@@ -1,0 +1,51 @@
+<html lang="es">
+<head>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    <title><%= title %></title>
+</head>
+<body>
+<h1><%= title %></h1>
+
+<% var counter = 0; %>
+<% for (var i = 0; i < rows.length; i++) { %>
+    <% if (counter % 15 === 0) { %>
+        <% if (counter !== 0) { %>
+            <div style="page-break-after: always;"></div>
+        <% } %>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Arrendatario</th>
+            <th>Apartamento</th>
+        </tr>
+        <% } %>
+
+        <tr>
+            <td><%= rows[i].id %></td>
+            <td>$<%= rows[i].amount %></td>
+            <td><%= rows[i].date %></td>
+            <td><%= rows[i].tenant %></td>
+            <td><%= rows[i].apartment %></td>
+        </tr>
+
+        <% counter++; %>
+        <% if (counter === 15 || i === rows.length - 1) { %>
+    </table>
+    <div style="page-break-after: always;"></div>
+    <% counter = 0; %>
+    <% } %>
+<% } %>
+</body>
+</html>

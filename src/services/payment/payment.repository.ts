@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { PaymentEntity } from 'src/Models/payment.entity';
 import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
-import { PaymentsTableI, TableI } from 'src/shared/interfaces/tables.interface';
+import { PaymentsTableI } from 'src/shared/interfaces/tables.interface';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
