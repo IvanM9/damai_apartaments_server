@@ -34,6 +34,9 @@ import { BackupController } from './controllers/backup/backup.controller';
 import { BackupService } from './services/backup/backup.service';
 import { MaintenanceService } from './services/maintenance/maintenance.service';
 import { MaintenanceRepository } from './services/maintenance/maintenance.repository';
+import { ReportsService } from './services/reports/reports.service';
+import { ReportsController } from './controllers/reports/reports.controller';
+import { FormatDateService } from './shared/services/format-date/format-date.service';
 
 @Module({
   imports: [
@@ -68,6 +71,7 @@ import { MaintenanceRepository } from './services/maintenance/maintenance.reposi
     MethodPaymentController,
     LeaseController,
     BackupController,
+    ReportsController,
   ],
   providers: [
     AppService,
@@ -90,6 +94,8 @@ import { MaintenanceRepository } from './services/maintenance/maintenance.reposi
     BackupService,
     MaintenanceService,
     MaintenanceRepository,
+    ReportsService,
+    FormatDateService,
   ],
 })
 export class AppModule {}

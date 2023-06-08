@@ -16,7 +16,9 @@ export class PaymentRepository {
   }
 
   async getAll() {
-    return await this.cnx.find(PaymentEntity);
+    return await this.cnx.find(PaymentEntity, {
+      relations: { lease: { apartment: true, tenant: true } },
+    });
   }
 
   async getPaymentByApartment(
