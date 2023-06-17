@@ -15,8 +15,21 @@ export class LeaseRepository {
   async getAll() {
     return await this.cnx
       .createQueryBuilder()
-      .select()
+      .select([
+        'lease.id as id',
+        'lease.start_date as "startDate"',
+        'lease.end_date as "endDate"',
+        'lease.status as status',
+        'apartment.id as "apartmentId"',
+        'tenant.id as "tenantId"',
+        'lease.monthly_rent as "monthlyRent"',
+        'lease.description as "description"',
+        'lease.created_at as "createdAt"',
+        'lease.updated_at as "updatedAt"',
+      ])
       .from(LeaseEntity, 'lease')
+      .innerJoin('lease.apartment', 'apartment')
+      .innerJoin('lease.tenant', 'tenant')
       .orderBy('lease.id', 'DESC')
       .getRawMany();
   }
@@ -58,7 +71,7 @@ export class LeaseRepository {
         'lease.id as id',
         'lease.start_date as "startDate"',
         'lease.end_date as "endDate"',
-        'lease.apartment_id as "apartmentId"',
+        'apartment.id as "apartmentId"',
         'apartment.name as "apartmentName"',
       ])
       .from(LeaseEntity, 'lease')
@@ -66,15 +79,13 @@ export class LeaseRepository {
       .where(
         new Brackets((qb) => {
           qb.where('lease.endDate >= :date', { date: new Date() }).andWhere(
-            'lease.endDate <= :date',
-            { date: otherDate.toDateString() },
+            'lease.endDate <= :otherDate',
+            { otherDate: otherDate.toDateString() },
           );
         }),
       )
       .andWhere('lease.status = :status', { status: true });
 
-    // TODO: Verificar problema de ejecución
-    console.log(await query.getQueryAndParameters());
-    return await query.getQueryAndParameters();
+    return await query.getRawMany();
   }
 }
