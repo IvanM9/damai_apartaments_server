@@ -71,8 +71,17 @@ export class ReportsService {
     }
   }
 
+  async getPDFByYear(year: string) {
+    try {
+      const data = await this.paymentRepo.getByYearOrMonth(year);
+
+      return await this.generatePDF(data);
+    } catch (err) {
+      throw new HttpException(err.message, 500);
+    }
+  }
+
   private async generatePDF(info: any) {
-    //TODO: Separar para que la función acepte un parámetro y así poder generar diferentes reportes
     try {
       const data = {
         title: 'Pagos',

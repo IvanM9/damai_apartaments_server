@@ -140,7 +140,8 @@ export class PaymentRepository {
       .innerJoin('lease.apartment', 'apartment')
       .where('strftime("%Y", payment.date) = :year', {
         year: year ?? new Date().getFullYear().toString(),
-      });
+      })
+      .orderBy('payment.date', 'DESC');
 
     if (month)
       query.andWhere('strftime("%m", payment.date) = :month', { month });

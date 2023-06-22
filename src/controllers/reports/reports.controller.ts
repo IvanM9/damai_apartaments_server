@@ -54,4 +54,18 @@ export class ReportsController {
 
       res.send(buffer);
   }
+
+  @Get('by-year')
+  @ApiQuery({ name: 'year', required: true })
+  async generatePDFByYear( @Res() res: Response, @Query('year') year: string) {
+      const buffer = await this.service.getPDFByYear(year);
+
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=reporte_del_${year}.pdf`,
+        'Content-Length': buffer.length,
+      })
+
+      res.send(buffer);
+  }
 }
