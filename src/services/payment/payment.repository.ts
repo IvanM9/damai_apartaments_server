@@ -23,7 +23,7 @@ export class PaymentRepository {
 
   async getPaymentByApartment(
     apartmentId: number,
-    params?: PaginationDto | null,
+    params: PaginationDto,
     startDate?: Date,
     endDate?: Date,
   ) {
@@ -34,15 +34,20 @@ export class PaymentRepository {
         'payment.amount as amount',
         'payment.date as date',
         'lease.id as "LeaseId"',
+        'tenant.firstname as "tenantFirstname"',
+        'tenant.lastname as "tenantLastname"',
+        'apartment.name as "apartmentName"',
         'payment.created_at as "createdAt"',
         'payment.updated_at as "updatedAt"',
       ])
       .from(PaymentEntity, 'payment')
       .innerJoin('payment.lease', 'lease')
       .innerJoin('lease.apartment', 'apartment')
+      .innerJoin('lease.tenant', 'tenant')
       .where('apartment.id = :apartmentId', { apartmentId })
       .limit(params.limit)
-      .offset((params.page - 1) * params.limit);
+      .offset((params.page - 1) * params.limit)
+      .orderBy('payment.date', 'DESC');    
 
     if (startDate) {
       query.andWhere('payment.date >= :startDate', { startDate });
@@ -77,15 +82,20 @@ export class PaymentRepository {
         'payment.amount as amount',
         'payment.date as date',
         'lease.id as "LeaseId"',
+        'apartment.name as "apartmentName"',
+        'tenant.firstname as "tenantFirstname"',
+        'tenant.lastname as "tenantLastname"',
         'payment.created_at as "createdAt"',
         'payment.updated_at as "updatedAt"',
       ])
       .from(PaymentEntity, 'payment')
       .innerJoin('payment.lease', 'lease')
       .innerJoin('lease.tenant', 'tenant')
+      .innerJoin('lease.apartment', 'apartment')
       .where('tenant.id = :tenantId', { tenantId })
       .offset((params.page - 1) * params.limit)
-      .limit(params.limit);
+      .limit(params.limit)
+      .orderBy('payment.date', 'DESC');
 
     if (startDate) {
       query.andWhere('payment.date >= :startDate', { startDate });
@@ -96,6 +106,7 @@ export class PaymentRepository {
     }
 
     const data = await query.getRawMany();
+
     return {
       data,
       page: params?.page,
@@ -113,8 +124,20 @@ export class PaymentRepository {
   async getByYearOrMonth(year?: string, month?: number) {
     const query = this.cnx
       .createQueryBuilder()
-      .select()
+      .select([
+        'payment.id as id',
+        'payment.amount as amount',
+        'payment.date as date',
+        'payment.created_at as "createdAt"',
+        'payment.updated_at as "updatedAt"',
+        'tenant.firstname as "tenantFirstname"',
+        'tenant.lastname as "tenantLastname"',
+        'apartment.name as "apartmentName"',
+      ])
       .from(PaymentEntity, 'payment')
+      .innerJoin('payment.lease', 'lease')
+      .innerJoin('lease.tenant', 'tenant')
+      .innerJoin('lease.apartment', 'apartment')
       .where('strftime("%Y", payment.date) = :year', {
         year: year ?? new Date().getFullYear().toString(),
       });
@@ -122,7 +145,7 @@ export class PaymentRepository {
     if (month)
       query.andWhere('strftime("%m", payment.date) = :month', { month });
 
-    return await query.getRawMany<PaymentEntity>();
+    return await query.getRawMany();
   }
 
   async getPaymentByLease(

@@ -1,22 +1,57 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { ReportsService } from '../../services/reports/reports.service';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @Controller('reports')
 @ApiTags('reports')
 export class ReportsController {
   constructor(private service: ReportsService) {}
-  @Get()
-  async generatePDF(@Res() res: Response) {
-    const buffer = await this.service.generatePDF();
+
+  @Get('by-month')
+  @ApiQuery({ name: 'year', required: false })
+  @ApiQuery({ name: 'month', required: true })
+  async generatePDFByMonth(
+    @Res() res: Response,
+    @Query('year') year: string,
+    @Query('month') month: number,
+  ) {
+    const buffer = await this.service.getPDFByMonth(year, month);
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename=report.pdf',
+      'Content-Disposition': `attachment; filename=reporte_mes_${month}_del_${year ?? new Date().getFullYear()}.pdf`,
       'Content-Length': buffer.length,
     });
 
     res.send(buffer);
+  }
+
+  @Get('by-apartment/:id')
+  @ApiQuery({ name: 'year', required: false })
+  async generatePDFByApartment( @Res() res: Response, @Query('year') year: string, @Param('id') id:number) {
+      const buffer = await this.service.getPDFByApartment(id, year);
+
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=reporte_apartamento.pdf`,
+        'Content-Length': buffer.length,
+      })
+
+      res.send(buffer);
+  }
+
+  @Get('by-tenant/:id')
+  @ApiQuery({ name: 'year', required: false })
+  async generatePDFByTenant( @Res() res: Response, @Query('year') year: string, @Param('id') id:number) {
+      const buffer = await this.service.getPDFByTenant(id, year);
+
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=reporte_inquilino.pdf`,
+        'Content-Length': buffer.length,
+      })
+
+      res.send(buffer);
   }
 }
