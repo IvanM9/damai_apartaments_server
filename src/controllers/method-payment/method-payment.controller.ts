@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -12,10 +11,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateMethodPaymentDto } from 'src/services/method-payment/method-payment.dto';
-import { MethodPaymentService } from 'src/services/method-payment/method-payment.service';
-import { environment } from 'src/shared/constants/environment';
-import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
+import { CreateMethodPaymentDto } from '@services/method-payment/method-payment.dto';
+import { MethodPaymentService } from '@services/method-payment/method-payment.service';
+import { environment } from '@shared/constants/environment';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 
 @Controller('method-payment')
 @ApiTags('Method Payment')

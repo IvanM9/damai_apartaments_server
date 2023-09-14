@@ -1,42 +1,51 @@
-import { ApiProperty, OmitType, PickType } from "@nestjs/swagger";
-import { IsDateString, IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsDecimal,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateLeaseDto {
-    @ApiProperty()
-    @IsDateString({ strict: true })
-    startDate: Date;
+  @ApiProperty()
+  @IsDateString({ strict: true })
+  startDate: Date;
 
-    @ApiProperty()
-    @IsDateString()
-    @IsOptional()
-    endDate: Date;
+  @ApiProperty()
+  @IsDateString()
+  @IsOptional()
+  endDate: Date;
 
-    @ApiProperty()
-    @IsDecimal({ decimal_digits: '1,2' })
-    monthlyRent: string;
+  @ApiProperty()
+  @IsDecimal({ decimal_digits: '1,2' })
+  monthlyRent: string;
 
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    description: string;
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  description: string;
 
-    @ApiProperty()
-    @IsNumber()
-    apartmentId: number;
+  @ApiProperty()
+  @IsNumber()
+  apartmentId: number;
 
-    @ApiProperty()
-    @IsNumber()
-    tenantId: number;
+  @ApiProperty()
+  @IsNumber()
+  tenantId: number;
 }
 
-export class UpdateLeaseDto extends PickType(CreateLeaseDto, ['description', 'endDate']) {
-    @ApiProperty()
-    @IsOptional()
-    @IsDateString({ strict: true })
-    startDate: Date;
+export class UpdateLeaseDto extends PickType(CreateLeaseDto, [
+  'description',
+  'endDate',
+]) {
+  @ApiProperty()
+  @IsOptional()
+  @IsDateString({ strict: true })
+  startDate: Date;
 
-    @ApiProperty()
-    @IsDecimal({ decimal_digits: '1,2' })
-    @IsOptional()
-    monthlyRent: string;
+  @ApiProperty()
+  @IsDecimal({ decimal_digits: '1,2' })
+  @IsOptional()
+  monthlyRent: string;
 }

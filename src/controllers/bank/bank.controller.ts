@@ -10,10 +10,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateBankDto } from 'src/services/bank/bank.dto';
-import { BankService } from 'src/services/bank/bank.service';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
-import { environment } from '../../shared/constants/environment';
+import { CreateBankDto } from '@services/bank/bank.dto';
+import { BankService } from '@services/bank/bank.service';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { environment } from '@shared/constants/environment';
 
 @Controller('bank')
 @ApiTags('bank')

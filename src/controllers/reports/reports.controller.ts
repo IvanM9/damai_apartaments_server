@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Res } from '@nestjs/common';
-import { ReportsService } from '../../services/reports/reports.service';
+import { ReportsService } from '@services/reports/reports.service';
 import { Response } from 'express';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
@@ -20,7 +20,9 @@ export class ReportsController {
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=reporte_mes_${month}_del_${year ?? new Date().getFullYear()}.pdf`,
+      'Content-Disposition': `attachment; filename=reporte_mes_${month}_del_${
+        year ?? new Date().getFullYear()
+      }.pdf`,
       'Content-Length': buffer.length,
     });
 
@@ -29,43 +31,51 @@ export class ReportsController {
 
   @Get('by-apartment/:id')
   @ApiQuery({ name: 'year', required: false })
-  async generatePDFByApartment( @Res() res: Response, @Query('year') year: string, @Param('id') id:number) {
-      const buffer = await this.service.getPDFByApartment(id, year);
+  async generatePDFByApartment(
+    @Res() res: Response,
+    @Query('year') year: string,
+    @Param('id') id: number,
+  ) {
+    const buffer = await this.service.getPDFByApartment(id, year);
 
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=reporte_apartamento.pdf`,
-        'Content-Length': buffer.length,
-      })
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=reporte_apartamento.pdf`,
+      'Content-Length': buffer.length,
+    });
 
-      res.send(buffer);
+    res.send(buffer);
   }
 
   @Get('by-tenant/:id')
   @ApiQuery({ name: 'year', required: false })
-  async generatePDFByTenant( @Res() res: Response, @Query('year') year: string, @Param('id') id:number) {
-      const buffer = await this.service.getPDFByTenant(id, year);
+  async generatePDFByTenant(
+    @Res() res: Response,
+    @Query('year') year: string,
+    @Param('id') id: number,
+  ) {
+    const buffer = await this.service.getPDFByTenant(id, year);
 
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=reporte_inquilino.pdf`,
-        'Content-Length': buffer.length,
-      })
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=reporte_inquilino.pdf`,
+      'Content-Length': buffer.length,
+    });
 
-      res.send(buffer);
+    res.send(buffer);
   }
 
   @Get('by-year')
   @ApiQuery({ name: 'year', required: true })
-  async generatePDFByYear( @Res() res: Response, @Query('year') year: string) {
-      const buffer = await this.service.getPDFByYear(year);
+  async generatePDFByYear(@Res() res: Response, @Query('year') year: string) {
+    const buffer = await this.service.getPDFByYear(year);
 
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=reporte_del_${year}.pdf`,
-        'Content-Length': buffer.length,
-      })
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=reporte_del_${year}.pdf`,
+      'Content-Length': buffer.length,
+    });
 
-      res.send(buffer);
+    res.send(buffer);
   }
 }

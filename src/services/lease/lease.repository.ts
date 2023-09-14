@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { LeaseEntity } from 'src/Models/lease.entity';
+import { LeaseEntity } from '@models/lease.entity';
 import { Brackets, EntityManager } from 'typeorm';
 
 @Injectable()

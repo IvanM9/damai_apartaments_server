@@ -2,16 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { PaymentEntity } from './payment.entity';
-import { BankEntity } from './bank.entity';
+import { MethodPaymentEntity } from './method-payment.entity';
 
-@Entity({ name: 'method_payment' })
-export class MethodPaymentEntity {
+@Entity({ name: 'bank' })
+export class BankEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,9 +29,6 @@ export class MethodPaymentEntity {
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
   updatedAt: Date;
 
-  @OneToMany((type) => PaymentEntity, (payment) => payment.methodPayment)
-  payments: PaymentEntity[];
-
-  @ManyToOne((type) => BankEntity, (bank) => bank.methodPayments)
-  bank: BankEntity;
+  @OneToMany(() => MethodPaymentEntity, (methodPayment) => methodPayment.bank)
+  methodPayments: Relation<MethodPaymentEntity[]>;
 }

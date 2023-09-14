@@ -11,10 +11,10 @@ import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   CreatePaymentDto,
   UpdatePaymentDto,
-} from 'src/services/payment/payment.dto';
-import { PaymentService } from 'src/services/payment/payment.service';
-import { environment } from 'src/shared/constants/environment';
-import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
+} from '@services/payment/payment.dto';
+import { PaymentService } from '@services/payment/payment.service';
+import { environment } from '@shared/constants/environment';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 
 @Controller('payment')
 @ApiTags('Payment')

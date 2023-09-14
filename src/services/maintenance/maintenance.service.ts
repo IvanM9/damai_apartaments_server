@@ -1,9 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { MaintenanceRepository } from './maintenance.repository';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { MaintenanceEntity } from '../../Models/maintenance.entity';
+import { MaintenanceEntity } from '@models/maintenance.entity';
 import { ApartmentService } from '../apartment/apartment.service';
 import { CreateMaintenanceDto, UpdateMaintenanceDto } from './maintenance.dto';
 
@@ -28,7 +28,7 @@ export class MaintenanceService {
   }
 
   async create(data: CreateMaintenanceDto) {
-    return await this.cnx.transaction(async (manager) => {
+    return await this.cnx.transaction(async () => {
       try {
         const apartment = await this.apartmentService.getById(data.apartmentId);
 

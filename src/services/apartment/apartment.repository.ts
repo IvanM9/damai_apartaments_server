@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { ApartmentEntity } from 'src/Models/apartment.entity';
+import { ApartmentEntity } from '@models/apartment.entity';
 import { EntityManager } from 'typeorm';
 import { CreateApartmentI } from './aparment.dto';
 
@@ -9,7 +9,7 @@ export class ApartmentRepository {
   constructor(@InjectEntityManager() private cnx: EntityManager) {}
 
   async create(payload: CreateApartmentI) {
-    const insert = await this.cnx.create(ApartmentEntity, {
+    const insert = this.cnx.create(ApartmentEntity, {
       ...payload,
       updatedAt: null,
     });

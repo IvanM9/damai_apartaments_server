@@ -1,10 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import * as sqlite from 'sqlite3';
-import { exec } from 'child_process';
-import * as ExcelJS from 'exceljs';
+import ExcelJS from 'exceljs';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import * as fs from 'fs';
+import fs from 'fs';
 
 @Injectable()
 export class BackupService {

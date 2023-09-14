@@ -5,8 +5,8 @@ import { EntityManager } from 'typeorm';
 import { ApartmentService } from '../apartment/apartment.service';
 import { CreateLeaseDto, UpdateLeaseDto } from './lease.dto';
 import { TenantService } from '../tenant/tenant.service';
-import { LeaseEntity } from 'src/Models/lease.entity';
-import { updateFailed, updateSuccessful } from 'src/shared/constants/messages';
+import { LeaseEntity } from '@models/lease.entity';
+import { updateFailed, updateSuccessful } from '@shared/constants/messages';
 
 @Injectable()
 export class LeaseService {

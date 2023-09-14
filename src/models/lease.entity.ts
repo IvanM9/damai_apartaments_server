@@ -2,10 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApartmentEntity } from './apartment.entity';
@@ -38,12 +38,12 @@ export class LeaseEntity {
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
   updatedAt: Date;
 
-  @ManyToOne((type) => ApartmentEntity, (apartment) => apartment.leases)
-  apartment: ApartmentEntity;
+  @ManyToOne(() => ApartmentEntity, (apartment) => apartment.leases)
+  apartment: Relation<ApartmentEntity>;
 
-  @ManyToOne((type) => TenantEntity, (tenant) => tenant.leases)
-  tenant: TenantEntity;
+  @ManyToOne(() => TenantEntity, (tenant) => tenant.leases)
+  tenant: Relation<TenantEntity>;
 
-  @OneToMany((type) => PaymentEntity, (payment) => payment.lease)
-  payments: PaymentEntity[];
+  @OneToMany(() => PaymentEntity, (payment) => payment.lease)
+  payments: Relation<PaymentEntity[]>;
 }

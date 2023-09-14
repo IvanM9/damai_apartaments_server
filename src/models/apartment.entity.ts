@@ -1,10 +1,10 @@
-/* eslint-disable */
 import {
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { LeaseEntity } from './lease.entity';
@@ -40,11 +40,8 @@ export class ApartmentEntity {
   busy: boolean;
 
   @OneToMany(() => LeaseEntity, (lease) => lease.apartment)
-  leases: LeaseEntity[];
+  leases: Relation<LeaseEntity[]>;
 
-  @OneToMany(
-    (type) => MaintenanceEntity,
-    (maintenance) => maintenance.apartment
-  )
-  maintenances: MaintenanceEntity[];
+  @OneToMany(() => MaintenanceEntity, (maintenance) => maintenance.apartment)
+  maintenances: Relation<MaintenanceEntity[]>;
 }

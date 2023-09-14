@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PaymentRepository } from './payment.repository';
 import { CreatePaymentDto, UpdatePaymentDto } from './payment.dto';
-import { PaymentEntity } from 'src/Models/payment.entity';
+import { PaymentEntity } from '@models/payment.entity';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { MethodPaymentService } from '../method-payment/method-payment.service';
 import { LeaseService } from '../lease/lease.service';
-import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 import { ApartmentService } from '../apartment/apartment.service';
 import { TenantService } from '../tenant/tenant.service';
-import { updateFailed, updateSuccessful } from 'src/shared/constants/messages';
+import { updateFailed, updateSuccessful } from '@shared/constants/messages';
 
 @Injectable()
 export class PaymentService {

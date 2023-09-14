@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { BankEntity } from 'src/Models/bank.entity';
+import { BankEntity } from '@models/bank.entity';
 import { EntityManager } from 'typeorm';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
-import { TableI } from '../../shared/interfaces/tables.interface';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { TableI } from '@shared/interfaces/tables.interface';
 
 @Injectable()
 export class BankRepository {

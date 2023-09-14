@@ -2,9 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { LeaseEntity } from './lease.entity';
@@ -24,7 +24,7 @@ export class TenantEntity {
   description: string;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: Boolean;
+  isActive: boolean;
 
   @Column({ name: 'phone', length: 15, nullable: true })
   phone: string;
@@ -41,6 +41,6 @@ export class TenantEntity {
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
   updatedAt: Date;
 
-  @OneToMany((type) => LeaseEntity, (lease) => lease.tenant)
-  leases: LeaseEntity[];
+  @OneToMany(() => LeaseEntity, (lease) => lease.tenant)
+  leases: Relation<LeaseEntity[]>;
 }

@@ -9,13 +9,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { MaintenanceService } from '../../services/maintenance/maintenance.service';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
-import { environment } from '../../shared/constants/environment';
+import { MaintenanceService } from '@services/maintenance/maintenance.service';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { environment } from '@shared/constants/environment';
 import {
   CreateMaintenanceDto,
   UpdateMaintenanceDto,
-} from '../../services/maintenance/maintenance.dto';
+} from '@services/maintenance/maintenance.dto';
 
 @Controller('maintenance')
 @ApiTags('maintenance')

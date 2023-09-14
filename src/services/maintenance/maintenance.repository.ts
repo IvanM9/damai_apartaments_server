@@ -1,8 +1,8 @@
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
-import { MaintenanceEntity } from '../../Models/maintenance.entity';
-import { TableI } from '../../shared/interfaces/tables.interface';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { MaintenanceEntity } from '@models/maintenance.entity';
+import { TableI } from '@shared/interfaces/tables.interface';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

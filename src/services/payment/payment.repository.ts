@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { PaymentEntity } from 'src/Models/payment.entity';
-import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
-import { PaymentsTableI } from 'src/shared/interfaces/tables.interface';
+import { PaymentEntity } from '@models/payment.entity';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { PaymentsTableI } from '@shared/interfaces/tables.interface';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class PaymentRepository {
       .where('apartment.id = :apartmentId', { apartmentId })
       .limit(params.limit)
       .offset((params.page - 1) * params.limit)
-      .orderBy('payment.date', 'DESC');    
+      .orderBy('payment.date', 'DESC');
 
     if (startDate) {
       query.andWhere('payment.date >= :startDate', { startDate });

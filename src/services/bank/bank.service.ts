@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { BankRepository } from './bank.repository';
 import { CreateBankDto } from './bank.dto';
-import { BankEntity } from 'src/Models/bank.entity';
-import { PaginationDto } from '../../shared/interfaces/pagination.dto';
+import { BankEntity } from '@models/bank.entity';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 
 @Injectable()
 export class BankService {

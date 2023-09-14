@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateLeaseDto, UpdateLeaseDto } from 'src/services/lease/lease.dto';
-import { LeaseService } from 'src/services/lease/lease.service';
+import { CreateLeaseDto, UpdateLeaseDto } from '@services/lease/lease.dto';
+import { LeaseService } from '@services/lease/lease.service';
 
 @Controller('lease')
 @ApiTags('Lease')

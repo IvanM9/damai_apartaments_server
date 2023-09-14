@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { renderFile } from 'ejs';
 import { PaymentService } from '../payment/payment.service';
-import { FormatDateService } from '../../shared/services/format-date/format-date.service';
+import { FormatDateService } from '@shared/services/format-date/format-date.service';
 import { PaymentRepository } from '../payment/payment.repository';
 
 @Injectable()
@@ -29,19 +29,21 @@ export class ReportsService {
       const startDate = new Date(`${year}-01-01`);
       const endDate = new Date(`${year}-12-31`);
 
-      const data = (await this.paymentRepo.getPaymentByApartment(
-        apartmentId, 
-        {
-          page: 1,
-          limit: 1000,
-          status: true,
-          search: null
-        },
-        startDate,
-        endDate
-       )).data;
+      const data = (
+        await this.paymentRepo.getPaymentByApartment(
+          apartmentId,
+          {
+            page: 1,
+            limit: 1000,
+            status: true,
+            search: null,
+          },
+          startDate,
+          endDate,
+        )
+      ).data;
 
-       return await this.generatePDF(data);
+      return await this.generatePDF(data);
     } catch (err) {
       throw new HttpException(err.message, 500);
     }
@@ -53,19 +55,21 @@ export class ReportsService {
       const startDate = new Date(`${year}-01-01`);
       const endDate = new Date(`${year}-12-31`);
 
-      const data = (await this.paymentRepo.getPaymentByTenant(
-        tenantId, 
-        {
-          page: 1,
-          limit: 1000,
-          status: true,
-          search: null
-        },
-        startDate,
-        endDate
-       )).data;
+      const data = (
+        await this.paymentRepo.getPaymentByTenant(
+          tenantId,
+          {
+            page: 1,
+            limit: 1000,
+            status: true,
+            search: null,
+          },
+          startDate,
+          endDate,
+        )
+      ).data;
 
-       return await this.generatePDF(data);
+      return await this.generatePDF(data);
     } catch (err) {
       throw new HttpException(err.message, 500);
     }
@@ -88,7 +92,7 @@ export class ReportsService {
         rows: await this.getDataPayments(info),
       };
 
-      const templatePath = 'src/views/reports.ejs';
+      const templatePath = 'views/reports.ejs';
 
       return new Promise<Buffer>((resolve, reject) => {
         renderFile(templatePath, data, async (err, html) => {
@@ -120,9 +124,9 @@ export class ReportsService {
     let i = 0;
 
     for (const element of info) {
-      const tenantName = 
+      const tenantName =
         element?.lease?.tenant?.firstname ?? element?.tenantFirstname;
-      const tenantLastname = 
+      const tenantLastname =
         element?.lease?.tenant?.lastname ?? element?.tenantLastname;
 
       data.push({

@@ -6,16 +6,25 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES6",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "src",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
+    "paths": {
+        "@/": ["*"],
+        "@controllers/*": ["controllers/*"],
+        "@models/*": ["models/*"],
+        "@services/*": ["services/*"],
+        "@shared/*": ["shared/*"],
+        "@views/*": ["views/*"]
+    }
   }
 }

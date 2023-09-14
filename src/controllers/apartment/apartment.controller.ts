@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateApartmentI } from 'src/services/apartment/aparment.dto';
-import { ApartmentService } from 'src/services/apartment/apartment.service';
+import { CreateApartmentI } from '@services/apartment/aparment.dto';
+import { ApartmentService } from '@services/apartment/apartment.service';
 
 @Controller('apartment')
 @ApiTags('apartment')

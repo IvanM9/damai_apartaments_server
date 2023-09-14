@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { MethodPaymentRepository } from './method-payment.repository';
 import { CreateMethodPaymentDto } from './method-payment.dto';
-import { MethodPaymentEntity } from 'src/Models/method-payment.entity';
+import { MethodPaymentEntity } from '@models/method-payment.entity';
 import { BankService } from '../bank/bank.service';
-import { PaginationDto } from 'src/shared/interfaces/pagination.dto';
+import { PaginationDto } from '@shared/interfaces/pagination.dto';
 
 @Injectable()
 export class MethodPaymentService {

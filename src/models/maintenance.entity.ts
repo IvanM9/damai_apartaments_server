@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApartmentEntity } from './apartment.entity';
@@ -25,6 +26,6 @@ export class MaintenanceEntity {
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
   updatedAt: Date;
 
-  @ManyToOne((type) => ApartmentEntity, (apartment) => apartment.maintenances)
-  apartment: ApartmentEntity;
+  @ManyToOne(() => ApartmentEntity, (apartment) => apartment.maintenances)
+  apartment: Relation<ApartmentEntity>;
 }
