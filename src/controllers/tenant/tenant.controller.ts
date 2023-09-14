@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -37,7 +38,7 @@ export class TenantController {
     return await this.service.update(id, payload);
   }
 
-  @Put('/update-status/:id')
+  @Patch('/update-status/:id')
   @ApiOperation({ summary: 'Actualizar el estado de un inquilino' })
   async updateStatus(
     @Param('id') id: number,
