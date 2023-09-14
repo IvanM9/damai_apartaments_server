@@ -1,0 +1,4 @@
+node_modules
+.git
+db/damai.sqlite
+ecosystem.config.js

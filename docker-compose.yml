@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  damai-apartments:
+    container_name: damai-apartments
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - damai-db:/user/src/app/db
+    restart: always
+    command: yarn run start:prod
+volumes:
+  damai-db:

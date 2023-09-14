@@ -45,7 +45,7 @@ import { join } from 'path';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'damai.sqlite',
+      database: './db/damai.sqlite',
       entities: [
         ApartmentEntity,
         BankEntity,
@@ -70,7 +70,7 @@ import { join } from 'path';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
-      exclude: ['/api/(.*)'],
+      exclude: ['/api/(.*)', '/api-docs'],
       serveStaticOptions: {
         cacheControl: true,
       },
