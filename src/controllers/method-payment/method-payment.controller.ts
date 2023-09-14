@@ -9,15 +9,18 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateMethodPaymentDto } from '@services/method-payment/method-payment.dto';
 import { MethodPaymentService } from '@services/method-payment/method-payment.service';
 import { environment } from '@shared/constants/environment';
 import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('method-payment')
 @ApiTags('Method Payment')
+@UseInterceptors(CacheInterceptor)
 export class MethodPaymentController {
   constructor(private service: MethodPaymentService) {}
 

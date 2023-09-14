@@ -1,10 +1,21 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateApartmentI } from '@services/apartment/aparment.dto';
 import { ApartmentService } from '@services/apartment/apartment.service';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('apartment')
 @ApiTags('apartment')
+@UseInterceptors(CacheInterceptor)
 export class ApartmentController {
   constructor(private service: ApartmentService) {}
 

@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MaintenanceService } from '@services/maintenance/maintenance.service';
@@ -16,9 +17,11 @@ import {
   CreateMaintenanceDto,
   UpdateMaintenanceDto,
 } from '@services/maintenance/maintenance.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('maintenance')
 @ApiTags('maintenance')
+@UseInterceptors(CacheInterceptor)
 export class MaintenanceController {
   constructor(private maintenanceService: MaintenanceService) {}
 

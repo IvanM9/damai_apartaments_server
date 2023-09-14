@@ -9,14 +9,17 @@ export class TenantService {
   constructor(
     private readonly repository: TenantRepository,
     @InjectEntityManager() private cnx: EntityManager,
-  ) { }
+  ) {}
 
   async findAll() {
     try {
       const tenants = await this.repository.findAll();
 
       if (!tenants)
-        throw new HttpException('No se encontraron inquilinos', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'No se encontraron inquilinos',
+          HttpStatus.NOT_FOUND,
+        );
 
       return tenants;
     } catch (error) {
@@ -25,12 +28,15 @@ export class TenantService {
   }
 
   async create(payload: CreateTenantI) {
-    return await this.cnx.transaction(async (cnxTran) => {
+    return await this.cnx.transaction(async () => {
       try {
         const insert = await this.repository.create(payload);
 
         if (insert === null)
-          throw new HttpException('No se pudo crear el inquilino', HttpStatus.BAD_REQUEST);
+          throw new HttpException(
+            'No se pudo crear el inquilino',
+            HttpStatus.BAD_REQUEST,
+          );
 
         return insert;
       } catch (error) {
@@ -44,7 +50,10 @@ export class TenantService {
       const updated = await this.repository.update(id, payload);
 
       if (updated === 0)
-        throw new HttpException(`No se pudo actualizar el inquilino con id ${id}`, HttpStatus.NOT_MODIFIED)
+        throw new HttpException(
+          `No se pudo actualizar el inquilino con id ${id}`,
+          HttpStatus.NOT_MODIFIED,
+        );
 
       return updated;
     } catch (error) {
@@ -57,7 +66,10 @@ export class TenantService {
       const updated = await this.repository.updateStatus(id, status);
 
       if (updated === 0)
-        throw new HttpException(`No se pudo actualizar el estado del inquilino con id ${id}`, HttpStatus.NOT_MODIFIED);
+        throw new HttpException(
+          `No se pudo actualizar el estado del inquilino con id ${id}`,
+          HttpStatus.NOT_MODIFIED,
+        );
 
       return updated;
     } catch (error) {
@@ -70,7 +82,10 @@ export class TenantService {
       const tenant = await this.repository.getById(id);
 
       if (tenant == null)
-        throw new HttpException(`No se encontró el inquilino con id ${id}`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `No se encontró el inquilino con id ${id}`,
+          HttpStatus.NOT_FOUND,
+        );
 
       return tenant;
     } catch (error) {

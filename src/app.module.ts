@@ -37,6 +37,7 @@ import { MaintenanceRepository } from './services/maintenance/maintenance.reposi
 import { ReportsService } from './services/reports/reports.service';
 import { ReportsController } from './controllers/reports/reports.controller';
 import { FormatDateService } from './shared/services/format-date/format-date.service';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -59,6 +60,11 @@ import { FormatDateService } from './shared/services/format-date/format-date.ser
         alwaysEnabled: true,
       },
       retryAttempts: 5,
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 3000,
+      max: 1000,
     }),
   ],
   controllers: [

@@ -1,10 +1,12 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { BackupService } from '@services/backup/backup.service';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('backup')
 @ApiTags('Backup')
+@UseInterceptors(CacheInterceptor)
 export class BackupController {
   constructor(private service: BackupService) {}
 

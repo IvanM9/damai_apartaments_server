@@ -1,10 +1,21 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateLeaseDto, UpdateLeaseDto } from '@services/lease/lease.dto';
 import { LeaseService } from '@services/lease/lease.service';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('lease')
 @ApiTags('Lease')
+@UseInterceptors(CacheInterceptor)
 export class LeaseController {
   constructor(private service: LeaseService) {}
 

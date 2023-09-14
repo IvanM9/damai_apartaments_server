@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
@@ -15,9 +16,11 @@ import {
 import { PaymentService } from '@services/payment/payment.service';
 import { environment } from '@shared/constants/environment';
 import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('payment')
 @ApiTags('Payment')
+@UseInterceptors(CacheInterceptor)
 export class PaymentController {
   constructor(private service: PaymentService) {}
 
