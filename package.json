@@ -19,13 +19,16 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "dev": "nest start -b swc --type-check --watch",
-    "build:swc": "nest build -b swc"
+    "build:swc": "nest build -b swc",
+    "deploy": "yarn run build && pm2 start ecosystem.config.js --only prod",
+    "deploy:swc": "yarn run build:swc && pm2 start ecosystem.config.js"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.1.0",
     "@nestjs/common": "^10.1.3",
     "@nestjs/core": "^10.1.3",
     "@nestjs/platform-express": "^10.1.3",
+    "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.8",
     "@nestjs/typeorm": "^10.0.0",
     "cache-manager": "^5.2.3",
