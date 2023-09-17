@@ -45,23 +45,35 @@ export class ApartmentRepository {
 
     if (status == undefined || status == null) status = true;
 
-    return await this.cnx
-      .createQueryBuilder()
-      .select()
-      .from(ApartmentEntity, 'apartment')
-      .where('apartment.busy = :busy', {
+    return await this.cnx.find(ApartmentEntity, {
+      where: {
         busy: String(busy) == 'true' ? true : false,
-      })
-      .andWhere('apartment.status = :status', {
         status: String(status) == 'true' ? true : false,
-      })
-      .getRawMany();
+      },
+    });
   }
 
   async getById(id: number) {
     return await this.cnx.findOne(ApartmentEntity, {
       where: { id },
       relations: { leases: true },
+      select: {
+        id: true,
+        name: true,
+        numberOfRooms: true,
+        monthlyRent: true,
+        status: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        busy: true,
+        leases: {
+          id: true,
+          tenant: { firstName: true, lastName: true },
+          startDate: true,
+          endDate: true,
+        },
+      },
     });
   }
 }

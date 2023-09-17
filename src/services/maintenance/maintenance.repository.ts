@@ -43,6 +43,17 @@ export class MaintenanceRepository {
     return await this.cnx.findOne(MaintenanceEntity, {
       where: { id },
       relations: { apartment: true },
+      select: {
+        id: true,
+        description: true,
+        amount: true,
+        createdAt: true,
+        updatedAt: true,
+        apartment: {
+          id: true,
+          name: true,
+        },
+      },
     });
   }
 

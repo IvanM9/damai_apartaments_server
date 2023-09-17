@@ -1,21 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class CreateTenantI {
   @ApiProperty()
-  firstname: string;
+  firstName: string;
 
   @ApiProperty()
-  lastname: string;
+  @IsOptional()
+  lastName: string;
 
   @ApiProperty()
+  @IsOptional()
   description: string;
 
   @ApiProperty()
+  @IsOptional()
   phone: string;
 
   @ApiProperty()
+  @IsOptional()
   email: string;
 
   @ApiProperty()
-  docNumber: string;
+  @IsOptional()
+  identification: string;
 }

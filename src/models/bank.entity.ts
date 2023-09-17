@@ -23,10 +23,16 @@ export class BankEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
 
-  @CreateDateColumn({ name: 'created_at', update: false })
+  @CreateDateColumn({
+    name: 'created_at',
+    update: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: true,
+  })
   updatedAt: Date;
 
   @OneToMany(() => MethodPaymentEntity, (methodPayment) => methodPayment.bank)

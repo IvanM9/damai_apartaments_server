@@ -38,6 +38,25 @@ export class LeaseRepository {
     return await this.cnx.findOne(LeaseEntity, {
       where: { id },
       relations: { apartment: true, tenant: true },
+      select: {
+        id: true,
+        startDate: true,
+        endDate: true,
+        status: true,
+        monthlyRent: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        apartment: {
+          id: true,
+          name: true,
+        },
+        tenant: {
+          id: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     });
   }
 

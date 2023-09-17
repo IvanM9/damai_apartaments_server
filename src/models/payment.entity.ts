@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
@@ -22,17 +23,25 @@ export class PaymentEntity {
   date: Date;
 
   @ManyToOne(() => LeaseEntity, (lease) => lease.payments)
+  @JoinColumn({ name: 'lease_id' })
   lease: Relation<LeaseEntity>;
 
   @ManyToOne(
     () => MethodPaymentEntity,
     (methodPayment) => methodPayment.payments,
   )
+  @JoinColumn({ name: 'method_payment_id' })
   methodPayment: Relation<MethodPaymentEntity>;
 
-  @CreateDateColumn({ name: 'created_at', update: false })
+  @CreateDateColumn({
+    name: 'created_at',
+    update: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: true,
+  })
   updatedAt: Date;
 }

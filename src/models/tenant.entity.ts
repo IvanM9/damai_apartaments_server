@@ -14,11 +14,11 @@ export class TenantEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'firstname', length: 50 })
-  firstname: string;
+  @Column({ name: 'first_name', length: 50 })
+  firstName: string;
 
-  @Column({ name: 'lastname', length: 50 })
-  lastname: string;
+  @Column({ name: 'last_name', length: 50 })
+  lastName: string;
 
   @Column({ name: 'description', nullable: true, type: 'text' })
   description: string;
@@ -33,12 +33,18 @@ export class TenantEntity {
   email: string;
 
   @Column({ name: 'doc_number', length: 15, nullable: true })
-  docNumber: string;
+  identification: string;
 
-  @CreateDateColumn({ name: 'created_at', update: false })
+  @CreateDateColumn({
+    name: 'created_at',
+    update: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: true,
+  })
   updatedAt: Date;
 
   @OneToMany(() => LeaseEntity, (lease) => lease.tenant)

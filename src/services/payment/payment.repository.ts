@@ -18,6 +18,18 @@ export class PaymentRepository {
   async getAll() {
     return await this.cnx.find(PaymentEntity, {
       relations: { lease: { apartment: true, tenant: true } },
+      select: {
+        id: true,
+        amount: true,
+        date: true,
+        createdAt: true,
+        updatedAt: true,
+        lease: {
+          id: true,
+          apartment: { name: true },
+          tenant: { firstName: true, lastName: true },
+        },
+      },
     });
   }
 
@@ -34,8 +46,8 @@ export class PaymentRepository {
         'payment.amount as amount',
         'payment.date as date',
         'lease.id as "LeaseId"',
-        'tenant.firstname as "tenantFirstname"',
-        'tenant.lastname as "tenantLastname"',
+        'tenant.first_name as "tenantFirstName"',
+        'tenant.last_name as "tenantLastName"',
         'apartment.name as "apartmentName"',
         'payment.created_at as "createdAt"',
         'payment.updated_at as "updatedAt"',
@@ -83,8 +95,8 @@ export class PaymentRepository {
         'payment.date as date',
         'lease.id as "LeaseId"',
         'apartment.name as "apartmentName"',
-        'tenant.firstname as "tenantFirstname"',
-        'tenant.lastname as "tenantLastname"',
+        'tenant.first_name as "tenantFirstName"',
+        'tenant.last_name as "tenantLastName"',
         'payment.created_at as "createdAt"',
         'payment.updated_at as "updatedAt"',
       ])
@@ -130,8 +142,8 @@ export class PaymentRepository {
         'payment.date as date',
         'payment.created_at as "createdAt"',
         'payment.updated_at as "updatedAt"',
-        'tenant.firstname as "tenantFirstname"',
-        'tenant.lastname as "tenantLastname"',
+        'tenant.first_name as "tenantFirstName"',
+        'tenant.last_name as "tenantLastName"',
         'apartment.name as "apartmentName"',
       ])
       .from(PaymentEntity, 'payment')

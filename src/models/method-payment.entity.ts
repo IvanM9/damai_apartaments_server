@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -25,15 +26,22 @@ export class MethodPaymentEntity {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
 
-  @CreateDateColumn({ name: 'created_at', update: false })
+  @CreateDateColumn({
+    name: 'created_at',
+    update: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: true,
+  })
   updatedAt: Date;
 
   @OneToMany(() => PaymentEntity, (payment) => payment.methodPayment)
   payments: Relation<PaymentEntity[]>;
 
   @ManyToOne(() => BankEntity, (bank) => bank.methodPayments)
+  @JoinColumn({ name: 'bank_id' })
   bank: Relation<BankEntity>;
 }

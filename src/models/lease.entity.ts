@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -32,16 +33,24 @@ export class LeaseEntity {
   @Column({ name: 'description', nullable: true, type: 'text' })
   description: string;
 
-  @CreateDateColumn({ name: 'created_at', update: false })
+  @CreateDateColumn({
+    name: 'created_at',
+    update: false,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    nullable: true,
+  })
   updatedAt: Date;
 
   @ManyToOne(() => ApartmentEntity, (apartment) => apartment.leases)
+  @JoinColumn({ name: 'apartment_id' })
   apartment: Relation<ApartmentEntity>;
 
   @ManyToOne(() => TenantEntity, (tenant) => tenant.leases)
+  @JoinColumn({ name: 'tenant_id' })
   tenant: Relation<TenantEntity>;
 
   @OneToMany(() => PaymentEntity, (payment) => payment.lease)

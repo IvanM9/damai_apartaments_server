@@ -44,6 +44,28 @@ export class TenantRepository {
     return await this.cnx.findOne(TenantEntity, {
       where: { id },
       relations: { leases: true },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+        leases: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          status: true,
+          monthlyRent: true,
+          description: true,
+          apartment: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
   }
 }

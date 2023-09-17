@@ -29,7 +29,7 @@ export class DateFormatInterceptor implements NestInterceptor {
         } else {
           element = this.formatDateService.formatDates(element);
         }
-
+        
         return element;
       }),
     );
