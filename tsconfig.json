@@ -24,7 +24,6 @@
         "@models/*": ["models/*"],
         "@services/*": ["services/*"],
         "@shared/*": ["shared/*"],
-        "@views/*": ["views/*"]
     }
   }
 }

@@ -4,6 +4,7 @@ import { renderFile } from 'ejs';
 import { PaymentService } from '../payment/payment.service';
 import { FormatDateService } from '@shared/services/format-date/format-date.service';
 import { PaymentRepository } from '../payment/payment.repository';
+import path from 'path';
 
 @Injectable()
 export class ReportsService {
@@ -92,7 +93,14 @@ export class ReportsService {
         rows: await this.getDataPayments(info),
       };
 
-      const templatePath = 'views/reports.ejs';
+      const templatePath = path.join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'views',
+        'reports.ejs',
+      );
 
       return new Promise<Buffer>((resolve, reject) => {
         renderFile(templatePath, data, async (err, html) => {
@@ -101,7 +109,10 @@ export class ReportsService {
             return;
           }
 
-          const browser = await puppeteer.launch({ headless: 'new' });
+          const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            headless: 'new',
+          });
 
           const page = await browser.newPage();
 
