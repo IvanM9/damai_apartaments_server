@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsDateString, IsDecimal, IsNumber } from 'class-validator';
+import { IsDateString, IsDecimal, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePaymentDto {
   @ApiProperty({ type: 'decimal', format: 'decimal', example: '"100.00"' })
@@ -16,6 +16,7 @@ export class CreatePaymentDto {
 
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   methodPaymentId: number;
 }
 

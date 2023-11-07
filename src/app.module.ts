@@ -3,13 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApartmentEntity } from '@models/apartment.entity';
-import { BankEntity } from '@models/bank.entity';
 import { LeaseEntity } from '@models/lease.entity';
 import { MaintenanceEntity } from '@models/maintenance.entity';
 import { MethodPaymentEntity } from '@models/method-payment.entity';
 import { PaymentEntity } from '@models/payment.entity';
 import { TenantEntity } from '@models/tenant.entity';
-import { BankController } from '@controllers/bank/bank.controller';
 import { MaintenanceController } from '@controllers/maintenance/maintenance.controller';
 import { TenantService } from '@services/tenant/tenant.service';
 import { ApartmentService } from '@services/apartment/apartment.service';
@@ -21,9 +19,7 @@ import { TenantRepository } from '@services/tenant/tenant.repository';
 import { ApartmentRepository } from '@services/apartment/apartment.repository';
 import { LeaseService } from '@services/lease/lease.service';
 import { MethodPaymentService } from '@services/method-payment/method-payment.service';
-import { BankService } from '@services/bank/bank.service';
 import { PaymentRepository } from '@services/payment/payment.repository';
-import { BankRepository } from '@services/bank/bank.repository';
 import { MethodPaymentRepository } from '@services/method-payment/method-payment.repository';
 import { MethodPaymentController } from '@controllers/method-payment/method-payment.controller';
 import { LeaseRepository } from '@services/lease/lease.repository';
@@ -48,7 +44,6 @@ import { join } from 'path';
       database: './db/damai.sqlite',
       entities: [
         ApartmentEntity,
-        BankEntity,
         LeaseEntity,
         MaintenanceEntity,
         MethodPaymentEntity,
@@ -81,7 +76,6 @@ import { join } from 'path';
     TenantController,
     ApartmentController,
     PaymentController,
-    BankController,
     MaintenanceController,
     MethodPaymentController,
     LeaseController,
@@ -97,9 +91,7 @@ import { join } from 'path';
     ApartmentRepository,
     LeaseService,
     MethodPaymentService,
-    BankService,
     PaymentRepository,
-    BankRepository,
     MethodPaymentRepository,
     LeaseRepository,
     {

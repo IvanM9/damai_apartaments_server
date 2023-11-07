@@ -2,15 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { PaymentEntity } from './payment.entity';
-import { BankEntity } from './bank.entity';
 
 @Entity({ name: 'method_payment' })
 export class MethodPaymentEntity {
@@ -40,8 +37,4 @@ export class MethodPaymentEntity {
 
   @OneToMany(() => PaymentEntity, (payment) => payment.methodPayment)
   payments: Relation<PaymentEntity[]>;
-
-  @ManyToOne(() => BankEntity, (bank) => bank.methodPayments)
-  @JoinColumn({ name: 'bank_id' })
-  bank: Relation<BankEntity>;
 }

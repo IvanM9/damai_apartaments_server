@@ -4,19 +4,19 @@ import { CreatePaymentDto, UpdatePaymentDto } from './payment.dto';
 import { PaymentEntity } from '@models/payment.entity';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { MethodPaymentService } from '../method-payment/method-payment.service';
 import { LeaseService } from '../lease/lease.service';
 import { PaginationDto } from '@shared/interfaces/pagination.dto';
 import { ApartmentService } from '../apartment/apartment.service';
 import { TenantService } from '../tenant/tenant.service';
 import { updateFailed, updateSuccessful } from '@shared/constants/messages';
+import { MethodPaymentRepository } from '@services/method-payment/method-payment.repository';
 
 @Injectable()
 export class PaymentService {
   constructor(
     private repo: PaymentRepository,
     @InjectEntityManager() private cnx: EntityManager,
-    private serviceMethodPayment: MethodPaymentService,
+    private serviceMethodPayment: MethodPaymentRepository,
     private serviceLease: LeaseService,
     private serviceApartment: ApartmentService,
     private serviceTenant: TenantService,
@@ -42,7 +42,7 @@ export class PaymentService {
           date: payload.date,
           lease,
           methodPayment,
-        } as PaymentEntity;
+        } as unknown as PaymentEntity;
 
         const insert = await this.repo.createPayment(data);
 

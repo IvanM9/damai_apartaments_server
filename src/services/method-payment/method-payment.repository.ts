@@ -27,13 +27,10 @@ export class MethodPaymentRepository {
         'methodPayment.name as name',
         'methodPayment.description as description',
         'methodPayment.isActive as isActive',
-        'bank.name as bank',
-        'bank.id as bankId',
         'methodPayment.createdAt as createdAt',
         'methodPayment.updatedAt as updatedAt',
       ])
       .from(MethodPaymentEntity, 'methodPayment')
-      .innerJoin('methodPayment.bank', 'bank')
       .where('methodPayment.isActive = :status', { status: params.status })
       .limit(params.limit)
       .offset((params.page - 1) * params.limit);

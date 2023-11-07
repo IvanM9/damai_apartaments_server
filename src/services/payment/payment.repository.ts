@@ -153,7 +153,7 @@ export class PaymentRepository {
       .where('strftime("%Y", payment.date) = :year', {
         year: year ?? new Date().getFullYear().toString(),
       })
-      .orderBy('payment.date', 'DESC');
+      .orderBy('payment.date', 'ASC');
 
     if (month)
       query.andWhere('strftime("%m", payment.date) = :month', { month });

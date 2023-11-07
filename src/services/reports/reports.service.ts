@@ -136,16 +136,16 @@ export class ReportsService {
 
     for (const element of info) {
       const tenantName =
-        element?.lease?.tenant?.firstname ?? element?.tenantFirstname;
-      const tenantLastname =
-        element?.lease?.tenant?.lastname ?? element?.tenantLastname;
+        element?.lease?.tenant?.firstName ?? element?.tenantFirstName;
+      const tenantLastName =
+        element?.lease?.tenant?.lastName ?? element?.tenantLastName;
 
       data.push({
         id: ++i,
         amount: element.amount,
         date: this.formatDateService.formatDates({ createdAt: element.date })
           .createdAt,
-        tenant: `${tenantName} ${tenantLastname}`,
+        tenant: `${tenantName} ${tenantLastName}`,
         apartment: element?.lease?.apartment?.name ?? element?.apartmentName,
       });
     }
