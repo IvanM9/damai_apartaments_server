@@ -41,22 +41,23 @@ export class ApartmentRepository {
   }
 
   async getAll(busy?: boolean, status?: boolean) {
-    if (busy == undefined || busy == null) busy = false;
+    if (busy) busy = String(busy) == 'true' ? true : false;
 
     if (status == undefined || status == null) status = true;
 
     return await this.cnx.find(ApartmentEntity, {
       where: {
-        busy: String(busy) == 'true' ? true : false,
+        busy,
         status: String(status) == 'true' ? true : false,
       },
+      order: { busy: 'ASC' },
     });
   }
 
   async getById(id: number) {
     return await this.cnx.findOne(ApartmentEntity, {
       where: { id },
-      relations: { leases: true },
+      relations: { leases: { tenant: true } },
       select: {
         id: true,
         name: true,
@@ -74,6 +75,11 @@ export class ApartmentRepository {
           endDate: true,
         },
       },
+      order: { leases: { startDate: 'DESC' } },
     });
+  }
+
+  async getByName(name: string) {
+    return await this.cnx.findOne(ApartmentEntity, { where: { name } });
   }
 }

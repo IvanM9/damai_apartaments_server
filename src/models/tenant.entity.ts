@@ -32,7 +32,7 @@ export class TenantEntity {
   @Column({ name: 'email', length: 50, nullable: true })
   email: string;
 
-  @Column({ name: 'doc_number', length: 15, nullable: true })
+  @Column({ name: 'doc_number', length: 15, nullable: true, unique: true })
   identification: string;
 
   @CreateDateColumn({

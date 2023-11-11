@@ -14,9 +14,17 @@ export class ApartmentService {
   async create(payload: CreateApartmentI) {
     return await this.cnx.transaction(async () => {
       try {
+        const exist = await this.repository.getByName(payload.name);
+
+        if (exist)
+          throw new HttpException(
+            'Ya existe un apartamento con ese nombre',
+            HttpStatus.BAD_REQUEST,
+          );
+
         const insert = await this.repository.create(payload);
 
-        if (insert == null) {
+        if (!insert) {
           throw new HttpException(
             'Error al crear el apartamento',
             HttpStatus.BAD_REQUEST,

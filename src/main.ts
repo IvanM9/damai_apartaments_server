@@ -10,7 +10,7 @@ async function bootstrap() {
     .setTitle('Damai API')
     .setDescription('The Damai API description')
     .setVersion('1.0')
-    .addServer('http://localhost:3000/api')
+    .addServer('http://localhost:4000/api')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   app.useGlobalPipes(new ValidationPipe());
@@ -18,7 +18,9 @@ async function bootstrap() {
   app.use(compression({ level: 4 }));
 
   SwaggerModule.setup('api-docs', app, document);
+  
+  app.enableCors();
 
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();

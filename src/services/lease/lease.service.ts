@@ -24,6 +24,12 @@ export class LeaseService {
           payload.apartmentId,
         );
 
+        if (apartment.busy)
+          throw new HttpException(
+            'El apartamento ya tiene un contrato',
+            HttpStatus.BAD_REQUEST,
+          );
+
         const tenant = await this.tenantService.getById(payload.tenantId);
 
         const exist = await this.repository.getByApartmentIdAndTenantId(
