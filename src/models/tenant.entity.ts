@@ -17,7 +17,7 @@ export class TenantEntity {
   @Column({ name: 'first_name', length: 50 })
   firstName: string;
 
-  @Column({ name: 'last_name', length: 50 })
+  @Column({ name: 'last_name', length: 50, nullable: true })
   lastName: string;
 
   @Column({ name: 'description', nullable: true, type: 'text' })

@@ -40,11 +40,8 @@ export class TenantController {
 
   @Patch('/update-status/:id')
   @ApiOperation({ summary: 'Actualizar el estado de un inquilino' })
-  async updateStatus(
-    @Param('id') id: number,
-    @Query('status') status: boolean,
-  ) {
-    return await this.service.updateStatus(id, status);
+  async updateStatus(@Param('id') id: number) {
+    return await this.service.updateStatus(id);
   }
 
   @Get('/:id')

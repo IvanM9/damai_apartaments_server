@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsEmail, IsOptional, Length } from 'class-validator';
 
 export class CreateTenantI {
   @ApiProperty()
@@ -15,13 +15,16 @@ export class CreateTenantI {
 
   @ApiProperty()
   @IsOptional()
+  @Length(10)
   phone: string;
 
   @ApiProperty()
   @IsOptional()
+  @IsEmail()
   email: string;
 
   @ApiProperty()
   @IsOptional()
+  @Length(10, 13)
   identification: string;
 }

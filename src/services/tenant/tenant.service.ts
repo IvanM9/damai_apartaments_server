@@ -61,9 +61,12 @@ export class TenantService {
     }
   }
 
-  async updateStatus(id: number, status: boolean) {
+  async updateStatus(id: number) {
     try {
-      const updated = await this.repository.updateStatus(id, status);
+      const updated = await this.repository.updateStatus(
+        id,
+        !(await this.getById(id)).isActive,
+      );
 
       if (updated === 0)
         throw new HttpException(

@@ -60,7 +60,7 @@ import { join } from 'path';
     }),
     CacheModule.register({
       isGlobal: true,
-      ttl: 3000,
+      ttl: 2000,
       max: 1000,
     }),
     ServeStaticModule.forRoot({

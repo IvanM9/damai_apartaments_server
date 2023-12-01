@@ -28,16 +28,8 @@ export class TenantRepository {
   }
 
   async updateStatus(id: number, status: boolean) {
-    const isActive = String(status) == 'true' ? true : false;
-
-    return (
-      await this.cnx
-        .createQueryBuilder()
-        .update(TenantEntity)
-        .set({ isActive })
-        .where('id = :id', { id })
-        .execute()
-    ).affected;
+    return (await this.cnx.update(TenantEntity, { id }, { isActive: status }))
+      .affected;
   }
 
   async getById(id: number) {
