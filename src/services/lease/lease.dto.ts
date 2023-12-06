@@ -3,6 +3,7 @@ import {
   IsDateString,
   IsDecimal,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -27,7 +28,7 @@ export class CreateLeaseDto {
   description: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsNumberString()
   apartmentId: number;
 
   @ApiProperty()
