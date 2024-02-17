@@ -6,32 +6,37 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FormatDateService } from '../services/format-date/format-date.service';
+import moment from 'moment-timezone';
 
 @Injectable()
 export class DateFormatInterceptor implements NestInterceptor {
-  constructor(private formatDateService: FormatDateService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((element) => {
-        if (!element) return;
-
-        if (Array.isArray(element.data)) {
-          element.data = element.data.map((item) =>
-            this.formatDateService.formatDates(item),
-          );
-        } else if (Array.isArray(element)) {
-          element = element.map((item) =>
-            this.formatDateService.formatDates(item),
-          );
-        } else if (element.data) {
-          element.data = this.formatDateService.formatDates(element.data);
-        } else {
-          element = this.formatDateService.formatDates(element);
-        }
-        
-        return element;
+      map((data) => {
+        return this.formatDates(data);
       }),
     );
+  }
+
+  keys = ['createdAt', 'updatedAt', 'date', 'startDate', 'endDate'];
+
+  private formatDates(data: any): any {
+    if (Array.isArray(data)) {
+      return data.map((item) => this.formatDates(item));
+    } else if (typeof data === 'object' && data !== null) {
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          if (this.keys.includes(key)) {
+            data[key] = moment(data[key])
+              .locale('es')
+              .tz('America/Guayaquil')
+              .format('dddd, MMMM D YYYY, h:mm a');
+          } else {
+            data[key] = this.formatDates(data[key]);
+          }
+        }
+      }
+    }
+    return data;
   }
 }

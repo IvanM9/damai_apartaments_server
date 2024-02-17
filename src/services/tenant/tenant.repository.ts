@@ -41,6 +41,7 @@ export class TenantRepository {
         firstName: true,
         lastName: true,
         email: true,
+        identification: true,
         phone: true,
         isActive: true,
         createdAt: true,
