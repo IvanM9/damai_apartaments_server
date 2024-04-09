@@ -19,11 +19,12 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-        "@/": ["*"],
+        "@/*": ["*"],
         "@controllers/*": ["controllers/*"],
         "@models/*": ["models/*"],
         "@services/*": ["services/*"],
         "@shared/*": ["shared/*"],
+        "@pipes/*": ["pipes/*"],
     }
   }
 }

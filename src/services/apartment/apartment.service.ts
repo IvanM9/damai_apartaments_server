@@ -60,6 +60,7 @@ export class ApartmentService {
   async updateStatus(id: number, status: boolean) {
     return await this.cnx.transaction(async () => {
       try {
+        status = status ?? !(await this.repository.getById(id)).status;
         const update = await this.repository.updateStatus(id, status);
 
         if (update <= 0) {

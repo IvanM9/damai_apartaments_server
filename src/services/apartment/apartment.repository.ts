@@ -21,13 +21,8 @@ export class ApartmentRepository {
   }
 
   async updateStatus(id: number, status: boolean) {
-    return (
-      await this.cnx.update(
-        ApartmentEntity,
-        { id },
-        { status: String(status) === 'true' ? true : false },
-      )
-    ).affected;
+    return (await this.cnx.update(ApartmentEntity, { id }, { status }))
+      .affected;
   }
 
   async updateBusy(id: number, busy: boolean) {

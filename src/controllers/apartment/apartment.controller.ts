@@ -13,6 +13,7 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateApartmentI } from '@services/apartment/aparment.dto';
 import { ApartmentService } from '@services/apartment/apartment.service';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { OptionalBooleanPipe } from '@pipes/parse-bool-optional.pipe';
 
 @Controller('apartment')
 @ApiTags('apartment')
@@ -30,7 +31,10 @@ export class ApartmentController {
   @ApiQuery({ name: 'busy', required: false })
   @ApiQuery({ name: 'status', required: false })
   @ApiOperation({ summary: 'Listar apartamentos' })
-  async getAll(@Query('busy') busy: boolean, @Query('status') status: boolean) {
+  async getAll(
+    @Query('busy') busy: boolean,
+    @Query('status', OptionalBooleanPipe) status: boolean,
+  ) {
     return await this.service.getAll(busy, status);
   }
 
@@ -41,10 +45,11 @@ export class ApartmentController {
   }
 
   @Patch('update-status/:id')
+  @ApiQuery({ name: 'status', required: false })
   @ApiOperation({ summary: 'Actualizar el estado de un apartamento' })
   async updateStatus(
     @Param('id') id: number,
-    @Query('status') status: boolean,
+    @Query('status', OptionalBooleanPipe) status: boolean,
   ) {
     return await this.service.updateStatus(id, status);
   }

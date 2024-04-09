@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseBoolPipe,
   Patch,
   Post,
   Put,
@@ -35,7 +36,7 @@ export class LeaseController {
   @ApiOperation({ summary: 'Actualizar el estado de un contrato' })
   async updateStatus(
     @Param('id') id: number,
-    @Param('status') status: boolean,
+    @Param('status', ParseBoolPipe) status: boolean,
   ) {
     return await this.service.updateStatus(id, status);
   }
