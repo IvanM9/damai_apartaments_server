@@ -1,24 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { LeaseRepository } from './lease.repository';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
 import { ApartmentService } from '../apartment/apartment.service';
 import { CreateLeaseDto, UpdateLeaseDto } from './lease.dto';
 import { TenantService } from '../tenant/tenant.service';
-import { LeaseEntity } from '@models/lease.entity';
 import { updateFailed, updateSuccessful } from '@shared/constants/messages';
+import { PrismaService } from '@/libs/prisma.service';
 
 @Injectable()
 export class LeaseService {
   constructor(
-    private repository: LeaseRepository,
-    @InjectEntityManager() private cnx: EntityManager,
     private apartmentService: ApartmentService,
     private tenantService: TenantService,
+    private db: PrismaService,
   ) {}
 
   async createLease(payload: CreateLeaseDto) {
-    return await this.cnx.transaction(async () => {
+    return await this.db.$transaction(async () => {
       try {
         const apartment = await this.apartmentService.getById(
           payload.apartmentId,
@@ -32,10 +28,12 @@ export class LeaseService {
 
         const tenant = await this.tenantService.getById(payload.tenantId);
 
-        const exist = await this.repository.getByApartmentIdAndTenantId(
-          payload.apartmentId,
-          payload.tenantId,
-        );
+        const exist = await this.db.lease.count({
+          where: {
+            tenantId: payload.tenantId,
+            apartmentId: payload.apartmentId,
+          },
+        });
 
         if (exist > 0)
           throw new HttpException(
@@ -43,22 +41,31 @@ export class LeaseService {
             HttpStatus.BAD_REQUEST,
           );
 
-        const data = {
-          startDate: payload.startDate,
-          endDate: payload.endDate,
-          apartment,
-          tenant,
-          description: payload.description,
-          monthlyRent: payload.monthlyRent,
-        } as LeaseEntity;
-
-        const insert = await this.repository.createLease(data);
-
-        if (!insert)
-          throw new HttpException(
-            'Error en crear contrato',
-            HttpStatus.BAD_REQUEST,
-          );
+        const insert = await this.db.lease
+          .create({
+            data: {
+              startDate: payload.startDate,
+              endDate: payload.endDate,
+              apartment: {
+                connect: {
+                  id: apartment.id,
+                },
+              },
+              tenant: {
+                connect: {
+                  id: tenant.id,
+                },
+              },
+              description: payload.description,
+              monthlyRent: payload.monthlyRent,
+            },
+          })
+          .catch((error) => {
+            throw new HttpException(
+              'Error en crear contrato',
+              HttpStatus.BAD_REQUEST,
+            );
+          });
 
         await this.apartmentService.updateBusy(payload.apartmentId, true);
 
@@ -71,13 +78,41 @@ export class LeaseService {
 
   async getAll() {
     try {
-      const data = await this.repository.getAll();
-
-      if (!data)
-        throw new HttpException(
-          'Error en obtener contratos',
-          HttpStatus.BAD_REQUEST,
-        );
+      const data = await this.db.lease
+        .findMany({
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            status: true,
+            monthlyRent: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+            apartment: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            tenant: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        })
+        .catch((error) => {
+          throw new HttpException(
+            'Error en obtener contratos',
+            HttpStatus.BAD_REQUEST,
+          );
+        });
 
       return data;
     } catch (error) {
@@ -85,15 +120,43 @@ export class LeaseService {
     }
   }
 
-  async getById(id: number) {
+  async getById(id: string) {
     try {
-      const data = await this.repository.getById(id);
-
-      if (!data)
-        throw new HttpException(
-          'Error en obtener contrato',
-          HttpStatus.BAD_REQUEST,
-        );
+      const data = await this.db.lease
+        .findUnique({
+          where: {
+            id,
+          },
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            status: true,
+            monthlyRent: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+            apartment: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            tenant: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        })
+        .catch((error) => {
+          throw new HttpException(
+            'Error en obtener contrato',
+            HttpStatus.BAD_REQUEST,
+          );
+        });
 
       return data;
     } catch (error) {
@@ -101,18 +164,26 @@ export class LeaseService {
     }
   }
 
-  async updateStatus(id: number, status: boolean) {
-    return await this.cnx.transaction(async () => {
+  async updateStatus(id: string, status: boolean) {
+    return await this.db.$transaction(async (cnx) => {
       try {
         const lease = await this.getById(id);
 
-        const updated = await this.repository.updateStatus(id, status);
-
-        if (updated.affected == 0)
-          throw new HttpException(
-            updateFailed(`contrato con id ${id}`),
-            HttpStatus.BAD_REQUEST,
-          );
+        await cnx.lease
+          .update({
+            where: {
+              id,
+            },
+            data: {
+              status,
+            },
+          })
+          .catch((error) => {
+            throw new HttpException(
+              updateFailed(`contrato con id ${id}`),
+              HttpStatus.BAD_REQUEST,
+            );
+          });
 
         await this.apartmentService.updateBusy(lease.apartment.id, status);
 
@@ -123,22 +194,26 @@ export class LeaseService {
     });
   }
 
-  async update(id: number, payload: UpdateLeaseDto) {
+  async update(id: string, payload: UpdateLeaseDto) {
     try {
-      const data = {
-        startDate: payload.startDate,
-        endDate: payload.endDate,
-        description: payload.description,
-        monthlyRent: payload.monthlyRent,
-      } as LeaseEntity;
-
-      const updated = await this.repository.update(data, id);
-
-      if (updated.affected == 0)
-        throw new HttpException(
-          updateFailed(`contrato con id ${id}`),
-          HttpStatus.BAD_REQUEST,
-        );
+      const updated = await this.db.lease
+        .update({
+          where: {
+            id,
+          },
+          data: {
+            startDate: payload.startDate,
+            endDate: payload.endDate,
+            description: payload.description,
+            monthlyRent: payload.monthlyRent,
+          },
+        })
+        .catch((error) => {
+          throw new HttpException(
+            updateFailed(`contrato con id ${id}`),
+            HttpStatus.BAD_REQUEST,
+          );
+        });
 
       return updateSuccessful(`contrato con id ${id}`);
     } catch (error) {
@@ -148,13 +223,43 @@ export class LeaseService {
 
   async getToBeExpired() {
     try {
-      const data = await this.repository.getToBeExpired();
+      const otherDate = new Date();
+      otherDate.setDate(otherDate.getDate() + 5);
 
-      if (data == null)
-        throw new HttpException(
-          'Error en obtener contratos',
-          HttpStatus.BAD_REQUEST,
-        );
+      const data = await this.db.lease
+        .findMany({
+          where: {
+            AND: [
+              {
+                endDate: {
+                  gte: new Date(),
+                },
+              },
+              {
+                endDate: {
+                  lte: otherDate,
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            apartment: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        })
+        .catch((error) => {
+          throw new HttpException(
+            'Error en obtener contratos',
+            HttpStatus.BAD_REQUEST,
+          );
+        });
 
       return data;
     } catch (error) {

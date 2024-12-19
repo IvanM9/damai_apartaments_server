@@ -3,7 +3,6 @@ import puppeteer from 'puppeteer';
 import { renderFile } from 'ejs';
 import { PaymentService } from '../payment/payment.service';
 import { FormatDateService } from '@shared/services/format-date/format-date.service';
-import { PaymentRepository } from '../payment/payment.repository';
 import path from 'path';
 
 @Injectable()
@@ -11,12 +10,11 @@ export class ReportsService {
   constructor(
     private readonly paymentService: PaymentService,
     private formatDateService: FormatDateService,
-    private paymentRepo: PaymentRepository,
   ) {}
 
   async getPDFByMonth(year: string, month: number) {
     try {
-      const data = await this.paymentRepo.getByYearOrMonth(year, month);
+      const data = await this.paymentService.getByYearOrMonth(year, month);
 
       return await this.generatePDF(data);
     } catch (err) {
@@ -24,14 +22,14 @@ export class ReportsService {
     }
   }
 
-  async getPDFByApartment(apartmentId: number, year?: string) {
+  async getPDFByApartment(apartmentId: string, year?: string) {
     try {
       year = year ?? new Date().getFullYear().toString();
       const startDate = new Date(`${year}-01-01`);
       const endDate = new Date(`${year}-12-31`);
 
       const data = (
-        await this.paymentRepo.getPaymentByApartment(
+        await this.paymentService.getPaymentByApartment(
           apartmentId,
           {
             page: 1,
@@ -50,14 +48,14 @@ export class ReportsService {
     }
   }
 
-  async getPDFByTenant(tenantId: number, year?: string) {
+  async getPDFByTenant(tenantId: string, year?: string) {
     try {
       year = year ?? new Date().getFullYear().toString();
       const startDate = new Date(`${year}-01-01`);
       const endDate = new Date(`${year}-12-31`);
 
       const data = (
-        await this.paymentRepo.getPaymentByTenant(
+        await this.paymentService.getPaymentsByTenant(
           tenantId,
           {
             page: 1,
@@ -78,7 +76,7 @@ export class ReportsService {
 
   async getPDFByYear(year: string) {
     try {
-      const data = await this.paymentRepo.getByYearOrMonth(year);
+      const data = await this.paymentService.getByYearOrMonth(year);
 
       return await this.generatePDF(data);
     } catch (err) {
@@ -111,7 +109,6 @@ export class ReportsService {
 
           const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            headless: 'new',
           });
 
           const page = await browser.newPage();
@@ -120,9 +117,11 @@ export class ReportsService {
 
           const buffer = await page.pdf({ format: 'A4' });
 
+          const nodeBuffer = Buffer.from(buffer);
+
           await browser.close();
 
-          resolve(buffer);
+          resolve(nodeBuffer);
         });
       });
     } catch (err) {

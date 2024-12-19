@@ -18,7 +18,7 @@ async function bootstrap() {
   app.use(compression({ level: 4 }));
 
   SwaggerModule.setup('api-docs', app, document);
-  
+
   app.enableCors();
 
   await app.listen(4000);

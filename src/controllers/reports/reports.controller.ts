@@ -34,7 +34,7 @@ export class ReportsController {
   async generatePDFByApartment(
     @Res() res: Response,
     @Query('year') year: string,
-    @Param('id') id: number,
+    @Param('id') id: string,
   ) {
     const buffer = await this.service.getPDFByApartment(id, year);
 
@@ -52,7 +52,7 @@ export class ReportsController {
   async generatePDFByTenant(
     @Res() res: Response,
     @Query('year') year: string,
-    @Param('id') id: number,
+    @Param('id') id: string,
   ) {
     const buffer = await this.service.getPDFByTenant(id, year);
 

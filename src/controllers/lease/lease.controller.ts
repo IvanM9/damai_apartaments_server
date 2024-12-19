@@ -35,7 +35,7 @@ export class LeaseController {
   @Patch(':id/:status')
   @ApiOperation({ summary: 'Actualizar el estado de un contrato' })
   async updateStatus(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Param('status', ParseBoolPipe) status: boolean,
   ) {
     return await this.service.updateStatus(id, status);
@@ -43,13 +43,13 @@ export class LeaseController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Actualizar un contrato' })
-  async update(@Body() payload: UpdateLeaseDto, @Param('id') id: number) {
+  async update(@Body() payload: UpdateLeaseDto, @Param('id') id: string) {
     return await this.service.update(id, payload);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un contrato' })
-  async getById(@Param('id') id: number) {
+  async getById(@Param('id') id: string) {
     return await this.service.getById(id);
   }
 

@@ -1,12 +1,11 @@
+import { PrismaService } from '@/libs/prisma.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import ExcelJS from 'exceljs';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
 import fs from 'fs';
 
 @Injectable()
 export class BackupService {
-  constructor(@InjectEntityManager() private cnx: EntityManager) {}
+  constructor(private cnx: PrismaService) {}
 
   getBackup() {
     try {
@@ -20,35 +19,32 @@ export class BackupService {
     try {
       const workbook = new ExcelJS.Workbook();
 
-      const tables = await this.cnx.query(
-        "SELECT name FROM sqlite_master WHERE type='table'",
-      );
+      const tables: any[] = await this.cnx.$queryRaw`
+        SELECT table_name as name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public'`;
 
-      for (const table of tables) {
+      for (const table of tables as any[]) {
         workbook.addWorksheet(table.name);
         const worksheet = await workbook.getWorksheet(table.name);
-        if (
-          table.name !== 'sqlite_sequence' &&
-          table.name !== 'query-result-cache'
-        ) {
-          const data = await this.cnx.query(`SELECT * FROM ${table.name}`);
 
-          if (data.length > 0) {
-            const columns = Object.keys(data[0]);
-            worksheet.columns = columns.map((column) => {
-              return {
-                header: column,
-                key: column,
-                width: 20,
-              };
-            });
+        const data: any = await this.cnx.$queryRaw`SELECT * FROM ${table.name}`;
 
-            for (const row of data) {
-              worksheet.addRow(Object.values(row));
-            }
+        if (data.length > 0) {
+          const columns = Object.keys(data[0]);
+          worksheet.columns = columns.map((column) => {
+            return {
+              header: column,
+              key: column,
+              width: 20,
+            };
+          });
 
-            worksheet.commit;
+          for (const row of data) {
+            worksheet.addRow(Object.values(row));
           }
+
+          worksheet.commit;
         }
       }
 

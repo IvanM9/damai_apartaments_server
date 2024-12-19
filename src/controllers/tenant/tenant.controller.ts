@@ -34,19 +34,19 @@ export class TenantController {
 
   @Put('/update/:id')
   @ApiOperation({ summary: 'Actualizar datos de un inquilino' })
-  async update(@Param('id') id: number, @Body() payload: CreateTenantI) {
+  async update(@Param('id') id: string, @Body() payload: CreateTenantI) {
     return await this.service.update(id, payload);
   }
 
   @Patch('/update-status/:id')
   @ApiOperation({ summary: 'Actualizar el estado de un inquilino' })
-  async updateStatus(@Param('id') id: number) {
+  async updateStatus(@Param('id') id: string) {
     return await this.service.updateStatus(id);
   }
 
   @Get('/:id')
   @ApiOperation({ summary: 'Obtener un inquilino' })
-  async getById(@Param('id') id: number) {
+  async getById(@Param('id') id: string) {
     return await this.service.getById(id);
   }
 }

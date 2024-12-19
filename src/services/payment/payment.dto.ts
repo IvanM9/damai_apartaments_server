@@ -1,23 +1,29 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsDateString, IsDecimal, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsDateString,
+  IsDecimal,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreatePaymentDto {
-  @ApiProperty({ type: 'decimal', format: 'decimal', example: '"100.00"' })
+  @ApiProperty({ type: 'number', format: 'decimal', example: 100.0 })
   @IsDecimal()
-  amount: number;
+  amount: string;
 
   @ApiProperty()
   @IsDateString({ strict: true })
   date: Date;
 
   @ApiProperty()
-  @IsNumber()
-  leaseId: number;
+  @IsString()
+  leaseId: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  methodPaymentId: number;
+  methodPaymentId: string;
 }
 
 export class UpdatePaymentDto extends OmitType(CreatePaymentDto, ['leaseId']) {}

@@ -10,13 +10,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { MaintenanceService } from '@services/maintenance/maintenance.service';
+import { MaintenanceService } from '@/services/bill/maintenance.service';
 import { PaginationDto } from '@shared/interfaces/pagination.dto';
 import { environment } from '@shared/constants/environment';
 import {
   CreateMaintenanceDto,
   UpdateMaintenanceDto,
-} from '@services/maintenance/maintenance.dto';
+} from '@/services/bill/maintenance.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('maintenance')
@@ -44,17 +44,17 @@ export class MaintenanceController {
   }
 
   @Get('/:id')
-  async getById(@Param('id') id: number) {
+  async getById(@Param('id') id: string) {
     return await this.maintenanceService.getById(id);
   }
 
   @Put('/:id')
-  async update(@Param('id') id: number, @Body() data: UpdateMaintenanceDto) {
+  async update(@Param('id') id: string, @Body() data: UpdateMaintenanceDto) {
     return await this.maintenanceService.update(id, data);
   }
 
   @Delete('/:id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     return await this.maintenanceService.delete(id);
   }
 }

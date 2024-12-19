@@ -40,7 +40,7 @@ export class ApartmentController {
 
   @Put('update/:id')
   @ApiOperation({ summary: 'Actualizar un apartamento' })
-  async update(@Param('id') id: number, @Body() payload: CreateApartmentI) {
+  async update(@Param('id') id: string, @Body() payload: CreateApartmentI) {
     return await this.service.update(id, payload);
   }
 
@@ -48,7 +48,7 @@ export class ApartmentController {
   @ApiQuery({ name: 'status', required: false })
   @ApiOperation({ summary: 'Actualizar el estado de un apartamento' })
   async updateStatus(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Query('status', OptionalBooleanPipe) status: boolean,
   ) {
     return await this.service.updateStatus(id, status);
@@ -56,7 +56,7 @@ export class ApartmentController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un apartamento' })
-  async getById(@Param('id') id: number) {
+  async getById(@Param('id') id: string) {
     return await this.service.getById(id);
   }
 }

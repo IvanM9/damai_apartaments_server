@@ -3,77 +3,98 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { MethodPaymentRepository } from './method-payment.repository';
 import { CreateMethodPaymentDto } from './method-payment.dto';
-import { MethodPaymentEntity } from '@models/method-payment.entity';
 import { PaginationDto } from '@shared/interfaces/pagination.dto';
+import { PrismaService } from '@/libs/prisma.service';
+import { PaymentsTableI, TableI } from '@/shared/interfaces/tables.interface';
 
 @Injectable()
 export class MethodPaymentService {
-  constructor(private repository: MethodPaymentRepository) {}
+  constructor(private cnx: PrismaService) {}
 
   async createMethodPayment(payload: CreateMethodPaymentDto) {
-    const insert = {
-      name: payload.name,
-      description: payload.description,
-    } as MethodPaymentEntity;
-
-    const result = await this.repository.createMethodPayment(insert);
-
-    if (!result) {
-      throw new BadRequestException('Error en registrar el metodo de pago');
-    }
-
-    return result;
-  }
-
-  async getById(id: number) {
-    const result = await this.repository.getById(id);
-
-    if (!result) {
-      throw new NotFoundException('Error en obtener el método de pago');
-    }
+    const result = await this.cnx.methodPayment
+      .create({
+        data: {
+          name: payload.name,
+          description: payload.description,
+        },
+      })
+      .catch((error) => {
+        throw new BadRequestException('Error en registrar el metodo de pago');
+      });
 
     return result;
   }
 
-  async getAll(params?: PaginationDto) {
-    const result = await this.repository.getAll(params);
-
-    if (!result) {
-      throw new NotFoundException('Error en obtener los métodos de pago');
-    }
+  async getById(id: string) {
+    const result = await this.cnx.methodPayment
+      .findUnique({
+        where: {
+          id,
+        },
+      })
+      .catch((error) => {
+        throw new NotFoundException('Error en obtener el método de pago');
+      });
 
     return result;
   }
 
-  async updateStatus(id: number, status: boolean) {
-    const updated = await this.repository.updateStatus(
-      id,
-      String(status) === 'true',
-    );
+  async getAll(params?: PaginationDto): Promise<TableI> {
+    const result = await this.cnx.methodPayment
+      .findMany({
+        take: params.limit,
+        skip: (params.page - 1) * params.limit,
+      })
+      .catch((error) => {
+        throw new NotFoundException('Error en obtener los métodos de pago');
+      });
 
-    if (updated.affected === 0) {
-      throw new BadRequestException(
-        'Error en actualizar el estado del método de pago',
-      );
-    }
-
-    return updated.affected;
+    return {
+      data: result,
+      page: params?.page,
+      limit: params?.limit,
+      total: result.length,
+      totalPages: Math.ceil(result.length / params.limit),
+      status: true,
+    };
   }
 
-  async update(id: number, payload: CreateMethodPaymentDto) {
-    const insert = {
-      name: payload.name,
-      description: payload.description,
-    } as MethodPaymentEntity;
+  async updateStatus(id: string, status: boolean) {
+    const updated = await this.cnx.methodPayment
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          status,
+        },
+      })
+      .catch((error) => {
+        throw new BadRequestException(
+          'Error en actualizar el estado del método de pago',
+        );
+      });
 
-    const updated = await this.repository.update(id, insert);
+    return updated;
+  }
 
-    if (updated.affected === 0) {
-      throw new BadRequestException('Error en actualizar el método de pago');
-    }
+  async update(id: string, payload: CreateMethodPaymentDto) {
+    const updated = await this.cnx.methodPayment
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          name: payload.name,
+          description: payload.description,
+        },
+      })
+      .catch((error) => {
+        throw new BadRequestException('Error en actualizar el método de pago');
+      });
 
-    return updated.affected;
+    return updated;
   }
 }

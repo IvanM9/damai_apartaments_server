@@ -36,7 +36,7 @@ export class MethodPaymentController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un método de pago' })
-  async getById(@Param('id') id: number) {
+  async getById(@Param('id') id: string) {
     try {
       return await this.service.getById(id);
     } catch (error) {
@@ -66,7 +66,7 @@ export class MethodPaymentController {
   @Patch(':id/:status')
   @ApiOperation({ summary: 'Modificar el estado de un método de pago' })
   async updateStatus(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Param('status') status: boolean,
   ) {
     return await this.service.updateStatus(id, status);
@@ -75,7 +75,7 @@ export class MethodPaymentController {
   @Put(':id')
   @ApiOperation({ summary: 'Modificar un método de pago' })
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() payload: CreateMethodPaymentDto,
   ) {
     return await this.service.update(id, payload);

@@ -28,12 +28,12 @@ export class CreateLeaseDto {
   description: string;
 
   @ApiProperty()
-  @IsNumberString()
-  apartmentId: number;
+  @IsString()
+  apartmentId: string;
 
   @ApiProperty()
-  @IsNumber()
-  tenantId: number;
+  @IsString()
+  tenantId: string;
 }
 
 export class UpdateLeaseDto extends PickType(CreateLeaseDto, [

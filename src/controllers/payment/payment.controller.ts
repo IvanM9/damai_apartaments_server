@@ -45,7 +45,7 @@ export class PaymentController {
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'search', required: false })
   async getPaymentsByApartment(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Query('startDate') startDate?: Date,
     @Query('endDate') endDate?: Date,
     @Query('page') page?: number,
@@ -72,7 +72,7 @@ export class PaymentController {
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'status', required: false })
   async getPaymentsByTenant(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Query('startDate') startDate?: Date,
     @Query('endDate') endDate?: Date,
     @Query('page') page?: number,
@@ -93,7 +93,7 @@ export class PaymentController {
 
   @Patch('/:id')
   @ApiOperation({ summary: 'Actualizar pago' })
-  async update(@Param('id') id: number, @Body() payload: UpdatePaymentDto) {
+  async update(@Param('id') id: string, @Body() payload: UpdatePaymentDto) {
     return await this.service.update(id, payload);
   }
 
@@ -113,7 +113,7 @@ export class PaymentController {
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'status', required: false })
   async getPaymentsByLease(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Query('startDate') startDate?: Date,
     @Query('endDate') endDate?: Date,
     @Query('page') page?: number,

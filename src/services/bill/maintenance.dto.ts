@@ -1,4 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { Decimal } from '@prisma/client/runtime/library';
 import { IsDecimal, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMaintenanceDto {
@@ -13,8 +14,8 @@ export class CreateMaintenanceDto {
   amount: string;
 
   @ApiProperty()
-  @IsNumber()
-  apartmentId: number;
+  @IsString()
+  apartmentId: string;
 }
 
 export class UpdateMaintenanceDto extends OmitType(CreateMaintenanceDto, [
